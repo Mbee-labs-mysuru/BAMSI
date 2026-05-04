@@ -1,0 +1,78 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+      - story/**
+      - feat/**
+      - fix/**
+      - chore/**
+  pull_request:
+
+jobs:
+  test:
+    name: tier1-${{ matrix.name }}
+    runs-on: ${{ matrix.runs_on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x86_64
+            runs_on: ubuntu-latest
+            cc: gcc
+            cxx: g++
+
+          - name: macos-aarch64
+            runs_on: macos-14
+            cc: clang
+            cxx: clang++
+
+    env:
+      BUILD_TYPE: Release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Show runner info
+        shell: bash
+        run: |
+          uname -a
+          uname -m
+          cmake --version
+
+      - name: Configure CMake with tests enabled
+        shell: bash
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+            -DBUILD_TESTING=ON
+
+      - name: Build tests
+        shell: bash
+        run: |
+          cmake --build build --config ${BUILD_TYPE} --parallel
+
+      - name: Run CTest
+        shell: bash
+        run: |
+          ctest --test-dir build \
+            --build-config ${BUILD_TYPE} \
+            --output-on-failure \
+            --no-tests=error
+
+      - name: Upload CTest logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ctest-${{ matrix.name }}
+          path: |
+            build/Testing/**/*
+            build/test-results/**/*
+          if-no-files-found: ignore

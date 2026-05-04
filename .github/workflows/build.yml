@@ -1,0 +1,85 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - story/**
+      - feat/**
+      - fix/**
+      - chore/**
+  pull_request:
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runs_on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x86_64
+            runs_on: ubuntu-latest
+            cxx: g++
+            cc: gcc
+
+          - name: linux-aarch64
+            runs_on: ubuntu-24.04-arm
+            cxx: g++
+            cc: gcc
+
+          - name: macos-x86_64
+            runs_on: macos-13
+            cxx: clang++
+            cc: clang
+
+          - name: macos-aarch64
+            runs_on: macos-14
+            cxx: clang++
+            cc: clang
+
+    env:
+      BUILD_TYPE: Release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Show runner info
+        shell: bash
+        run: |
+          uname -a
+          uname -m
+          cmake --version || true
+          $CC --version || true
+          $CXX --version || true
+
+      - name: Configure CMake
+        shell: bash
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+
+      - name: Build
+        shell: bash
+        run: |
+          cmake --build build --config ${BUILD_TYPE} --parallel
+
+      - name: Smoke-check binary presence
+        shell: bash
+        run: |
+          test -f build/bamsi || test -f build/Release/bamsi
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.name }}
+          path: |
+            build/bamsi
+            build/Release/bamsi
+          if-no-files-found: ignore
