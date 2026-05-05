@@ -2,11 +2,13 @@
 
 #include "bamsi/types.hpp"
 
+#include <string>
+
 namespace bamsi {
 
 struct VersionInfo {
     std::string version;
-    uint32_t format_version;
+    std::uint32_t format_version;
 };
 
 VersionInfo GetVersionInfo();
