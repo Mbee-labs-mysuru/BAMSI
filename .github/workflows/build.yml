@@ -40,8 +40,12 @@ jobs:
 
     env:
       BUILD_TYPE: Release
-      CXXFLAGS: -Wno-error=deprecated-declarations -D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES
-    steps:
+      CXXFLAGS: >-
+        -Wno-error=deprecated-declarations
+        -D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES
+        -D_LIBCPP_ENABLE_CXX17_REMOVED_RESULT_OF
+        -include include/bamsi/sdsl_compat.hpp
+      steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
