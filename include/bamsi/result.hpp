@@ -10,13 +10,13 @@ namespace bamsi {
 template <typename T>
 class Result {
 public:
-    Result(const T& value)
+    explicit Result(const T& value)
         : status_(Status::Ok()), value_(value), has_value_(true) {}
 
-    Result(T&& value)
+    explicit Result(T&& value)
         : status_(Status::Ok()), value_(std::move(value)), has_value_(true) {}
 
-    Result(const Status& status)
+    explicit Result(const Status& status)
         : status_(status), value_(), has_value_(false) {}
 
     bool ok() const { return status_.ok(); }
