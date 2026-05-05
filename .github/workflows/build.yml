@@ -63,7 +63,7 @@ jobs:
           CXX: ${{ matrix.cxx }}
         run: |
           cmake -S . -B build \
-            -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
             -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
       - name: Build

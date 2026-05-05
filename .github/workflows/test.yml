@@ -52,7 +52,7 @@ jobs:
         run: |
           cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-            -DBUILD_TESTING=ON
+            -DBUILD_TESTING=ON \
             -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
       - name: Build tests
