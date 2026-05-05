@@ -30,6 +30,7 @@ jobs:
 
     env:
       BUILD_TYPE: Release
+      CXXFLAGS: -Wno-error=deprecated-declarations
 
     steps:
       - name: Checkout repository
@@ -49,11 +50,13 @@ jobs:
         env:
           CC: ${{ matrix.cc }}
           CXX: ${{ matrix.cxx }}
+          CXXFLAGS: ${{ env.CXXFLAGS }}
         run: |
           cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
             -DBUILD_TESTING=ON \
-            -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+            -DCMAKE_CXX_FLAGS="${CXXFLAGS}"
 
       - name: Build tests
         shell: bash
