@@ -1,0 +1,71 @@
+name: Format Version Compatibility
+
+on:
+  pull_request:
+    branches:
+      - main
+      - release/**
+  workflow_dispatch:
+
+jobs:
+  compatibility-scaffold:
+    name: compatibility-scaffold-linux-x86_64
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_TYPE: Release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure CMake
+        env:
+          CC: gcc
+          CXX: g++
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+            -DBUILD_TESTING=ON
+
+      - name: Build current binary
+        run: |
+          cmake --build build --config ${BUILD_TYPE} --parallel
+
+      - name: Prepare compatibility fixture directory
+        shell: bash
+        run: |
+          mkdir -p compatibility/fixtures/v0
+          cat > compatibility/fixtures/README.md <<'FIXEOF'
+          Stage 1 scaffold:
+          This workflow exists because the execution plan requires a
+          format-version compatibility workflow in Stage 1.
+          
+          Real previous-major-version .bsi fixtures will be added once:
+          1. the .bsi writer is implemented,
+          2. versioned fixtures are generated and pinned,
+          3. bamsi info / verify / open-paths are stable enough to test.
+          FIXEOF
+
+      - name: Check scaffold preconditions
+        shell: bash
+        run: |
+          test -d compatibility/fixtures
+          test -f compatibility/fixtures/README.md
+          test -f build/bamsi || test -f build/Release/bamsi
+
+      - name: Placeholder compatibility gate
+        shell: bash
+        run: |
+          echo "Stage 1 scaffold only: previous-major .bsi fixture testing not enabled yet."
+          echo "This job confirms the compatibility workflow exists and is wired."
+
+      - name: Upload compatibility scaffold artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: format-version-scaffold
+          path: compatibility/fixtures/**
+          if-no-files-found: error

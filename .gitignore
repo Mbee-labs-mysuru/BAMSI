@@ -1,0 +1,31 @@
+# Generated build files
+build/
+install/
+cmake-build-*/
+compile_commands.json
+
+# Local environment
+env/
+.vscode/
+.idea/
+.DS_Store
+
+# Generated data
+data/
+
+# Object files and binaries
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+
+*.bak
+*.orig

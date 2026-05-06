@@ -1,0 +1,145 @@
+name: Determinism
+
+on:
+  pull_request:
+    branches:
+      - main
+      - release/**
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    name: build-linux-x86_64
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_name: ${{ steps.meta.outputs.artifact_name }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure metadata
+        id: meta
+        run: echo "artifact_name=determinism-linux-x86_64" >> "$GITHUB_OUTPUT"
+
+      - name: Configure CMake
+        env:
+          CC: gcc
+          CXX: g++
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_TESTING=OFF
+
+      - name: Build
+        run: |
+          cmake --build build --config Release --parallel
+
+      - name: Package deterministic candidate
+        shell: bash
+        run: |
+          mkdir -p out
+          if [ -f build/bamsi ]; then
+            cp build/bamsi out/bamsi
+          elif [ -f build/Release/bamsi ]; then
+            cp build/Release/bamsi out/bamsi
+          else
+            echo "bamsi binary not found"
+            exit 1
+          fi
+          sha256sum out/bamsi | tee out/SHA256SUMS.txt
+
+      - name: Upload candidate artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: determinism-linux-x86_64
+          path: out/*
+          if-no-files-found: error
+
+  build-macos:
+    name: build-macos-aarch64
+    runs-on: macos-14
+    outputs:
+      artifact_name: ${{ steps.meta.outputs.artifact_name }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure metadata
+        id: meta
+        run: echo "artifact_name=determinism-macos-aarch64" >> "$GITHUB_OUTPUT"
+
+      - name: Configure CMake
+        env:
+          CC: clang
+          CXX: clang++
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_TESTING=OFF
+
+      - name: Build
+        run: |
+          cmake --build build --config Release --parallel
+
+      - name: Package deterministic candidate
+        shell: bash
+        run: |
+          mkdir -p out
+          if [ -f build/bamsi ]; then
+            cp build/bamsi out/bamsi
+          elif [ -f build/Release/bamsi ]; then
+            cp build/Release/bamsi out/bamsi
+          else
+            echo "bamsi binary not found"
+            exit 1
+          fi
+          shasum -a 256 out/bamsi | tee out/SHA256SUMS.txt
+
+      - name: Upload candidate artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: determinism-macos-aarch64
+          path: out/*
+          if-no-files-found: error
+
+  compare:
+    name: compare-artifact-digests
+    runs-on: ubuntu-latest
+    needs:
+      - build-linux
+      - build-macos
+
+    steps:
+      - name: Download linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: determinism-linux-x86_64
+          path: artifacts/linux
+
+      - name: Download macos artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: determinism-macos-aarch64
+          path: artifacts/macos
+
+      - name: Compare hashes
+        shell: bash
+        run: |
+          linux_hash="$(awk '{print $1}' artifacts/linux/SHA256SUMS.txt)"
+          macos_hash="$(awk '{print $1}' artifacts/macos/SHA256SUMS.txt)"
+
+          echo "linux  sha256: ${linux_hash}"
+          echo "macos  sha256: ${macos_hash}"
+
+          if [ "${linux_hash}" != "${macos_hash}" ]; then
+            echo "Determinism check failed: binary hashes differ across runners."
+            exit 1
+          fi
+
+          echo "Determinism scaffold passed: binary hashes match."

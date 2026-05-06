@@ -1,0 +1,70 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  nightly-tier2-scaffold:
+    name: nightly-tier2-scaffold-linux-x86_64
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_TYPE: Release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure CMake
+        env:
+          CC: gcc
+          CXX: g++
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+            -DBUILD_TESTING=ON
+
+      - name: Build
+        run: |
+          cmake --build build --config ${BUILD_TYPE} --parallel
+
+      - name: Run Tier 1 tests as nightly floor
+        run: |
+          ctest --test-dir build \
+            --build-config ${BUILD_TYPE} \
+            --output-on-failure \
+            --no-tests=error
+
+      - name: Prepare nightly scaffold directories
+        shell: bash
+        run: |
+          mkdir -p nightly/benchmarks
+          mkdir -p nightly/tier2
+          cat > nightly/README.md <<'READEOF'
+          Stage 1 nightly scaffold:
+          - TIER 2 synthetic tests are not implemented yet.
+          - Benchmark smoke runs are not implemented yet.
+          - This workflow exists now so Stage 1 has the required nightly hook.
+          READEOF
+
+      - name: Placeholder Tier 2 synthetic hook
+        shell: bash
+        run: |
+          echo "TIER 2 synthetic nightly hook not enabled yet."
+
+      - name: Placeholder benchmark smoke hook
+        shell: bash
+        run: |
+          echo "Benchmark smoke nightly hook not enabled yet."
+
+      - name: Upload nightly scaffold artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-scaffold
+          path: nightly/**
+          if-no-files-found: error
