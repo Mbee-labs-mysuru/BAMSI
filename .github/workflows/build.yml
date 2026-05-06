@@ -46,47 +46,47 @@ jobs:
         -D_LIBCPP_ENABLE_CXX17_REMOVED_RESULT_OF
         -include include/bamsi/sdsl_compat.hpp
       steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            submodules: recursive
 
-      - name: Show runner info
-        shell: bash
-        run: |
-          uname -a
-          uname -m
-          cmake --version || true
-          $CC --version || true
-          $CXX --version || true
+        - name: Show runner info
+          shell: bash
+          run: |
+            uname -a
+            uname -m
+            cmake --version || true
+            $CC --version || true
+            $CXX --version || true
 
-      - name: Configure CMake
-        shell: bash
-        env:
-          CC: ${{ matrix.cc }}
-          CXX: ${{ matrix.cxx }}
-          CXXFLAGS: ${{ env.CXXFLAGS }}
-        run: |
-          cmake -S . -B build \
-            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-            -DCMAKE_CXX_FLAGS="${CXXFLAGS}"
+        - name: Configure CMake
+          shell: bash
+          env:
+            CC: ${{ matrix.cc }}
+            CXX: ${{ matrix.cxx }}
+            CXXFLAGS: ${{ env.CXXFLAGS }}
+          run: |
+            cmake -S . -B build \
+              -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+              -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+              -DCMAKE_CXX_FLAGS="${CXXFLAGS}"
 
-      - name: Build
-        shell: bash
-        run: |
-          cmake --build build --config ${BUILD_TYPE} --parallel
+        - name: Build
+          shell: bash
+          run: |
+            cmake --build build --config ${BUILD_TYPE} --parallel
 
-      - name: Smoke-check binary presence
-        shell: bash
-        run: |
-          test -f build/bamsi || test -f build/Release/bamsi
+        - name: Smoke-check binary presence
+          shell: bash
+          run: |
+            test -f build/bamsi || test -f build/Release/bamsi
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-${{ matrix.name }}
-          path: |
-            build/bamsi
-            build/Release/bamsi
-          if-no-files-found: ignore
+        - name: Upload build artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: build-${{ matrix.name }}
+            path: |
+              build/bamsi
+              build/Release/bamsi
+            if-no-files-found: ignore
