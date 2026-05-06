@@ -30,56 +30,52 @@ jobs:
 
     env:
       BUILD_TYPE: Release
-      CXXFLAGS: >-
-        -Wno-error=deprecated-declarations
-        -D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES
-        -D_LIBCPP_ENABLE_CXX17_REMOVED_RESULT_OF
-        -include include/bamsi/sdsl_compat.hpp
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
-          with:
-            submodules: recursive
+      CXXFLAGS: "-Wno-error=deprecated-declarations -D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES -D_LIBCPP_ENABLE_CXX17_REMOVED_RESULT_OF -include include/bamsi/sdsl_compat.hpp"
+    steps:
+       - name: Checkout repository
+         uses: actions/checkout@v4
+         with:
+           submodules: recursive
 
-        - name: Show runner info
-          shell: bash
-          run: |
-            uname -a
-            uname -m
-            cmake --version
+       - name: Show runner info
+         shell: bash
+         run: |
+           uname -a
+           uname -m
+           cmake --version
 
-        - name: Configure CMake with tests enabled
-          shell: bash
-          env:
-            CC: ${{ matrix.cc }}
-            CXX: ${{ matrix.cxx }}
-            CXXFLAGS: ${{ env.CXXFLAGS }}
-          run: |
-            cmake -S . -B build \
-              -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-              -DBUILD_TESTING=ON \
-              -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-              -DCMAKE_CXX_FLAGS="${CXXFLAGS}"
+       - name: Configure CMake with tests enabled
+         shell: bash
+         env:
+           CC: ${{ matrix.cc }}
+           CXX: ${{ matrix.cxx }}
+           CXXFLAGS: ${{ env.CXXFLAGS }}
+         run: |
+           cmake -S . -B build \
+             -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+             -DBUILD_TESTING=ON \
+             -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+             -DCMAKE_CXX_FLAGS="${CXXFLAGS}"
 
-        - name: Build tests
-          shell: bash
-          run: |
-            cmake --build build --config ${BUILD_TYPE} --parallel
+       - name: Build tests
+         shell: bash
+         run: |
+           cmake --build build --config ${BUILD_TYPE} --parallel
 
-        - name: Run CTest
-          shell: bash
-          run: |
-            ctest --test-dir build \
-              --build-config ${BUILD_TYPE} \
-              --output-on-failure \
-              --no-tests=error
+       - name: Run CTest
+         shell: bash
+         run: |
+           ctest --test-dir build \
+             --build-config ${BUILD_TYPE} \
+             --output-on-failure \
+             --no-tests=error
 
-        - name: Upload CTest logs
-          if: always()
-          uses: actions/upload-artifact@v4
-          with:
-            name: ctest-${{ matrix.name }}
-            path: |
-              build/Testing/**/*
-              build/test-results/**/*
-            if-no-files-found: ignore
+       - name: Upload CTest logs
+         if: always()
+         uses: actions/upload-artifact@v4
+         with:
+           name: ctest-${{ matrix.name }}
+           path: |
+             build/Testing/**/*
+             build/test-results/**/*
+           if-no-files-found: ignore
