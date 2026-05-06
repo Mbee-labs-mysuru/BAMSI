@@ -19,6 +19,12 @@ include(GNUInstallDirs)
 find_package(Threads REQUIRED)
 
 add_subdirectory(external/sdsl-lite)
+# Build the third-party sdsl library with C++17 so std::result_of etc. are available
+set_property(TARGET sdsl PROPERTY CXX_STANDARD 17)
+set_property(TARGET sdsl PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET sdsl PROPERTY CXX_EXTENSIONS OFF)
+# set_property(TARGET sdsl_cereal PROPERTY CXX_STANDARD 17)  # only if such a target exists
+
 add_subdirectory(src)
 
 add_executable(bamsi
