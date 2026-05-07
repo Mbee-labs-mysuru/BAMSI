@@ -6,7 +6,7 @@ The format is based on Keep a Changelog principles, adapted for this repository.
 This project is licensed under the Apache License 2.0.[web:566]
 
 ## [Unreleased]
-
+- Documented local test invocation and ensured CLI smoketests run via CTest.
 ### Added
 - Repository scaffold for the C++ track.
 - Source tree skeleton aligned with the frozen BAMSI architecture.

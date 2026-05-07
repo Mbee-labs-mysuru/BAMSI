@@ -1,0 +1,85 @@
+=== BAMSI Benchmark Environment ===
+Date: 2026-05-07T11:45:52Z
+BAMSI version: bamsi 0.1.0 format-version 6
+BAMSI commit: 2942ad3860108d8bd84228fb4f6dc08e697d4c03
+
+=== CPU ===
+Architecture:                            x86_64
+CPU op-mode(s):                          32-bit, 64-bit
+Address sizes:                           39 bits physical, 48 bits virtual
+Byte Order:                              Little Endian
+CPU(s):                                  8
+On-line CPU(s) list:                     0-7
+Vendor ID:                               GenuineIntel
+Model name:                              Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+CPU family:                              6
+Model:                                   142
+Thread(s) per core:                      2
+Core(s) per socket:                      4
+Socket(s):                               1
+Stepping:                                10
+CPU(s) scaling MHz:                      99%
+CPU max MHz:                             3400.0000
+CPU min MHz:                             400.0000
+BogoMIPS:                                3600.00
+Flags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb pti ssbd ibrs ibpb stibp tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp vnmi md_clear flush_l1d arch_capabilities
+Virtualization:                          VT-x
+L1d cache:                               128 KiB (4 instances)
+L1i cache:                               128 KiB (4 instances)
+L2 cache:                                1 MiB (4 instances)
+L3 cache:                                6 MiB (1 instance)
+NUMA node(s):                            1
+NUMA node0 CPU(s):                       0-7
+Vulnerability Gather data sampling:      Mitigation; Microcode
+Vulnerability Ghostwrite:                Not affected
+Vulnerability Indirect target selection: Not affected
+Vulnerability Itlb multihit:             KVM: Mitigation: Split huge pages
+Vulnerability L1tf:                      Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable
+Vulnerability Mds:                       Mitigation; Clear CPU buffers; SMT vulnerable
+Vulnerability Meltdown:                  Mitigation; PTI
+Vulnerability Mmio stale data:           Mitigation; Clear CPU buffers; SMT vulnerable
+Vulnerability Old microcode:             Not affected
+Vulnerability Reg file data sampling:    Not affected
+Vulnerability Retbleed:                  Mitigation; IBRS
+Vulnerability Spec rstack overflow:      Not affected
+Vulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl
+Vulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:                Mitigation; IBRS; IBPB conditional; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+Vulnerability Srbds:                     Mitigation; Microcode
+Vulnerability Tsa:                       Not affected
+Vulnerability Tsx async abort:           Not affected
+Vulnerability Vmscape:                   Mitigation; IBPB before exit to userspace
+
+=== Memory ===
+               total        used        free      shared  buff/cache   available
+Mem:            23Gi       6.3Gi        13Gi       966Mi       4.4Gi        17Gi
+Swap:           39Gi       3.1Gi        36Gi
+
+=== Kernel ===
+Linux fedora 6.19.13-100.fc42.x86_64 #1 SMP PREEMPT_DYNAMIC Sat Apr 18 21:32:46 UTC 2026 x86_64 GNU/Linux
+
+=== Disk ===
+NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda           8:0    0 931.5G  0 disk 
+├─sda1        8:1    0   548M  0 part 
+├─sda2        8:2    0  97.1G  0 part 
+├─sda3        8:3    0   396G  0 part 
+├─sda4        8:4    0     1K  0 part 
+├─sda5        8:5    0   393G  0 part 
+├─sda6        8:6    0     1G  0 part 
+├─sda7        8:7    0  1023M  0 part 
+└─sda8        8:8    0  42.5G  0 part 
+zram0       251:0    0     8G  0 disk [SWAP]
+nvme0n1     259:0    0 953.9G  0 disk 
+├─nvme0n1p1 259:1    0   600M  0 part /boot/efi
+├─nvme0n1p2 259:2    0     1G  0 part /boot
+├─nvme0n1p3 259:3    0  99.7G  0 part /home
+│                                     /
+├─nvme0n1p4 259:4    0  99.7G  0 part 
+└─nvme0n1p5 259:5    0   753G  0 part /run/media/abhishek/Important_files
+
+=== Comparison Tools ===
+samtools: benchmarks/scripts/run_benchmarks.sh: line 59: samtools: command not found
+not installed
+genozip:  benchmarks/scripts/run_benchmarks.sh: line 60: genozip: command not found
+not installed
