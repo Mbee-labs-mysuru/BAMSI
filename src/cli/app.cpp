@@ -22,7 +22,7 @@ Status RunApp(int argc, char** argv) {
         return RunVersion();
     }
 
-    return DispatchKnownCommand(cmd);
+    return DispatchCommand(cmd, argc, argv);
 }
 
 }  // namespace bamsi
