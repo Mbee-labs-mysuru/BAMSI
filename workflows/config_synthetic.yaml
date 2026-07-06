@@ -1,0 +1,28 @@
+# BAMSIX Snakemake Workflow Configuration for Synthetic Data
+# Usage: cd workflows && snakemake --cores 8 --configfile config_synthetic.yaml
+
+# Input BAM file (synthetic dataset included in the repository)
+bam: "../data/test/synthetic_10k.bam"
+
+# Output .bsi index
+bsi: "results_synthetic/index.bsi"
+
+# Results directory
+results_dir: "results_synthetic"
+
+# Build threads
+threads: 4
+
+# Motifs for counting (Representative patterns for synthetic data)
+motifs:
+  - "ACGT"
+  - "TTAGGG"
+  - "GATTACA"
+  - "AAAA"
+  - "GCGC"
+
+# Clinically relevant genomic regions (mapped to chr1 in synthetic data)
+regions:
+  - "chr1:1-1000000"
+  - "chr1:1-100000"
+  - "chr1:1-100"

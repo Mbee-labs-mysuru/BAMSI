@@ -1,0 +1,33 @@
+# BAMSIX Reference Workflow Configuration
+# See workflows/Snakefile for usage instructions
+
+# Input BAM file
+bam: "data/input.bam"
+
+# Output .bsi index
+bsi: "results/index.bsi"
+
+# Results directory
+results_dir: "results"
+
+# Build threads
+threads: 8
+
+# Motifs for counting (Contract §8: 10 representative motifs)
+motifs:
+  - "AGATC"
+  - "GATTACA"
+  - "TTAGGG"
+  - "CCAAT"
+  - "GGCC"
+  - "ATCGATCG"
+  - "GCGCGCGC"
+  - "AAAAAA"
+  - "TATATAT"
+  - "CAGCAG"
+
+# Clinically relevant genomic regions
+regions:
+  - "chr17:7570000-7580000"    # TP53
+  - "chr7:55019017-55211628"   # EGFR
+  - "chr13:32315086-32400266"  # BRCA2

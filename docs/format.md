@@ -1,238 +1,158 @@
-# BAMSI v1.0 File Format Specification
+# BAMSIX .bsi Format Specification
 
-## Status
-Draft stub for Stage 1.  
-Normative target document for Stage 6 completion.
+**Format version:** 6
+**Reference:** Architecture §7
 
-## Purpose
-This document specifies the `.bsi` binary file format produced by the BAMSI reference implementation.  
-It is intended to be precise enough for an independent re-implementer to parse, validate, and inspect BAMSI files.
+## Overview
 
-## Scope
-This specification covers:
-- File-level structure
-- Header fields
-- Stream sections
-- FM-index section
-- Bitvector section
-- Window section
-- Directory section
-- Footer
-- Checksums, versioning, and validation behavior
+The `.bsi` file is a binary container storing a compressed FM-index, auxiliary streams, bitvectors, window tables, and read metadata. All multi-byte integers are little-endian.
 
-This document does not yet provide full byte diagrams for every field.  
-Those are added as the implementation stabilizes.
+## File Structure
 
-## Normative language
-The key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** are used in their normative sense.
-
-## Legend
-- **Normative**: required for compliance
-- **Informative**: explanation, rationale, or implementation guidance
-- **Stub**: section exists now but will be expanded later
-- **Track-agnostic**: applies to both C and Rust implementations
-
-## Canonical references
-- BAMSI Contract v3.3
-- BAMSI Architecture v4.3
-- BAMSI Execution Plan v2.0
-
-## Format overview
-A `.bsi` file is a single sealed binary file written in little-endian form.  
-The high-level layout is:
-
-1. Header
-2. Sseq section
-3. Squal section
-4. Smeta section
-5. Smap section
-6. FM-index section
-7. Bitvector section
-8. Window section
-9. Directory section
-10. Footer
-
-## Endianness
-All multi-byte integers are little-endian.
+```
+┌──────────────────────────────────┐
+│ Header (variable)                │
+├──────────────────────────────────┤
+│ Stream: S_seq (BWT)              │
+│ Stream: S_qual (quality scores)  │
+│ Stream: S_meta (CIGAR + FLAG)    │
+│ Stream: S_map (chrom_id + pos)   │
+├──────────────────────────────────┤
+│ FM-Index Section                 │
+├──────────────────────────────────┤
+│ Bitvector Section                │
+├──────────────────────────────────┤
+│ Window Table                     │
+├──────────────────────────────────┤
+│ Directory Section                │
+├──────────────────────────────────┤
+│ Read Metadata Section            │
+├──────────────────────────────────┤
+│ Footer                           │
+└──────────────────────────────────┘
+```
 
 ## Header
-### Purpose
-The header records format identity, build provenance, frozen build parameters, chromosome-name mapping, and section-interpretation metadata.
 
-### Required fields
-- magic
-- formatversion
-- bamsiversion
-- hostosid
-- cpuarchid
-- buildtimestamputc
-- islossless
-- sourcefilecount
-- sourcemanifesthash
-- orderinghash
-- Slength
-- Nreads
-- Nwindows
-- samplesteps
-- hasisasamples
-- samplestepsprime
-- enablesarange
-- sarangevariant
-- sharedbwt
-- enablebidirectional
-- recommendedseedlength
-- windowsizeT
-- entropyorderk
-- qualcodecid
-- quallossybins
-- metacodecid
-- mapcodecid
-- strandmode
-- sentinelrow
-- chromcount
-- chromnametable
-- seqblocksize
-- qualblocksize
-- allowparallelsa
-- referencebasedencoding
-- referencesha256
-- flags
+| Offset | Size | Field | Description |
+|--------|------|-------|-------------|
+| 0 | 4 | `magic` | `"BMSI"` (0x42, 0x4D, 0x53, 0x49) |
+| 4 | 2 | `version` | Format version (currently 6) |
+| 6 | 16 | `bamsix_version` | Null-terminated version string |
+| 22 | 1 | `host_os_id` | Build OS identifier |
+| 23 | 1 | `cpu_arch_id` | CPU architecture |
+| 24 | 8 | `build_timestamp_utc` | Unix timestamp |
+| 32 | 1 | `is_lossless` | 1 = lossless, 0 = lossy |
+| 33 | 4 | `source_file_count` | Number of input BAM files |
+| 37 | 32 | `source_manifest_hash` | SHA-256 of input file manifest |
+| 69 | 32 | `ordering_hash` | SHA-256 of read ordering |
+| 101 | 8 | `S_length` | Length of concatenated sequence S |
+| 109 | 8 | `N_reads` | Number of reads |
+| 117 | 4 | `N_windows` | Number of windows |
+| 121 | 4 | `sample_step_s` | SA sampling step |
+| 125 | 1 | `has_isa_samples` | ISA samples present |
+| 126 | 4 | `sample_step_s_prime` | ISA sampling step |
+| 130 | 1 | `enable_sarange` | SARange enabled |
+| 131 | 1 | `sarange_variant` | SARange variant ID |
+| 132 | 1 | `shared_bwt` | Shared BWT flag |
+| 133 | 1 | `enable_bidirectional` | Bidirectional FM-index |
+| 134 | 1 | `recommended_seed_length` | Recommended seed length |
+| 135 | 8 | `window_size_T` | Window size in S-characters |
+| 143 | 1 | `entropy_order_k` | Entropy coding order |
+| 144 | 1 | `qual_codec_id` | Quality stream codec |
+| 145 | 1 | `qual_lossy_bins` | Lossy quality bin count (0=lossless) |
+| 146 | 1 | `meta_codec_id` | Metadata stream codec |
+| 147 | 1 | `map_codec_id` | Mapping stream codec |
+| 148 | 1 | `strand_mode` | 0=StrandComplete, 1=SingleStrand |
+| 149 | 8 | `sentinel_row` | BWT row of sentinel |
+| 157 | 4 | `chrom_count` | Number of chromosomes |
+| 161+ | var | `chrom_name_table` | Per-chrom: id(4) + name_len(4) + name |
 
-### Notes
-This section will later include:
-- exact field order
-- exact integer widths
-- byte-level layout table
-- version-specific constraints
+Following the chrom table:
+| Size | Field | Description |
+|------|-------|-------------|
+| 4 | `seq_block_size` | Sequence block size |
+| 4 | `qual_block_size` | Quality block size |
+| 1 | `allow_parallel_sa` | Parallel SA-IS flag |
+| 1 | `reference_based_encoding` | Reference-based encoding |
+| 32 | `reference_sha256` | Reference SHA-256 |
+| 4 | `flags` | Reserved flags |
 
-## Stream sections
-### Purpose
-The four stream sections store the compressed payloads for:
-- Sseq
-- Squal
-- Smeta
-- Smap
+## Stream Section Format
 
-### Common section shape
-Each stream section contains:
-- payloadlength
-- codecid
-- codecmetadata
-- payloadbytes
-- sectionchecksum
+Each of the four streams (S_seq, S_qual, S_meta, S_map) uses:
 
-### Notes
-Future expansion will define codec metadata layouts for:
-- sequence entropy configuration
-- quality codec parameters
-- metadata codec parameters
-- mapping codec parameters
+| Size | Field | Description |
+|------|-------|-------------|
+| 8 | `payload_length` | Compressed payload size in bytes |
+| 1 | `codec_id` | Codec identifier |
+| var | `payload` | Compressed stream data |
+| 8 | `section_checksum` | Section xxHash64 |
 
-## FM-index section
-### Purpose
-The FM-index section stores the compressed full-text index over the concatenated read-sequence string.
+## FM-Index Section
 
-### Expected contents
-- BWT length
-- BWT payload or shared-BWT ownership semantics
-- C array
-- Occ metadata
-- Occ payload
-- SA samples
-- optional ISA samples
-- optional SARange payload
-- section checksum
+| Size | Field | Description |
+|------|-------|-------------|
+| 8 | `bwt_length` | BWT length (= |S|, sentinel-stripped) |
+| var | `bwt_bytes` | Raw BWT bytes |
+| 56 | `C_array` | 7 × uint64 cumulative counts |
+| 8 | `occ_length` | Occurrence table size |
+| var | `occ_bytes` | Serialized occurrence table |
+| 8 | `sa_count` | Number of SA samples |
+| var | `sa_samples` | SA samples (sa_count × uint64) |
+| 8 | `checksum` | Section checksum |
 
-### Notes
-This section must document shared-BWT behavior explicitly once serialization is frozen.
+## Bitvector Section
 
-## Bitvector section
-### Purpose
-Stores the serialized succinct bitvectors used for read-boundary and window-boundary resolution.
+| Size | Field | Description |
+|------|-------|-------------|
+| 8 | `b_read_length` | B_read serialized size |
+| var | `b_read_bytes` | B_read bitvector |
+| 8 | `b_window_length` | B_window serialized size |
+| var | `b_window_bytes` | B_window bitvector |
+| 8 | `checksum` | Section checksum |
 
-### Expected contents
-- Bread
-- Bwindow
-- sectionchecksum
+## Window Table
 
-## Window section
-### Purpose
-Stores the ordered window table used for regional filtering.
+Per window (repeated `N_windows` times):
 
-### Per-window fields
-- chromid
-- l
-- r
-- firstreadid
-- lastreadid
-- genomicstart
-- genomicend
+| Size | Field | Description |
+|------|-------|-------------|
+| 4 | `chrom_id` | Chromosome index |
+| 8 | `l` | S-position start |
+| 8 | `r` | S-position end |
+| 8 | `first_read_id` | First read in window |
+| 8 | `last_read_id` | Last read in window |
+| 8 | `genomic_start` | Genomic start (1-based) |
+| 8 | `genomic_end` | Genomic end (1-based) |
 
-## Directory section
-### Purpose
-Stores four directories in fixed order:
-- dirseq
-- dirqual
-- dirmeta
-- dirmap
+Followed by 8-byte section checksum.
 
-### Normative constraints
-- `dirmeta` MUST be per-read
-- `dirmap` MUST be per-read
-- `dirseq` MAY be per-read or block-level
-- `dirqual` MAY be per-read or block-level
+## Read Metadata Section
 
-### Notes
-This section will later define:
-- directory header layout
-- per-read entry layout
-- block-level entry layout
-- checksum coverage
-- size-accounting examples
+| Size | Field | Description |
+|------|-------|-------------|
+| 8 | `n_reads` | Number of reads |
+| var | per-read data | See below |
+| 8 | `checksum` | Section checksum |
+
+Per read:
+
+| Size | Field | Description |
+|------|-------|-------------|
+| 4 | `chrom_id` | Chromosome index |
+| 8 | `pos` | 1-based alignment position |
+| 4 | `seq_len` | Sequence length |
+| 4 | `n_ops` | Number of CIGAR operations |
+| var | CIGAR ops | op(1 byte) + len(4 bytes) per op |
 
 ## Footer
-### Purpose
-Closes the file and provides whole-file integrity coverage.
 
-### Expected contents
-- globalchecksum
-- footermagic
+| Size | Field | Description |
+|------|-------|-------------|
+| 8 | `global_checksum` | xxHash64 of all preceding bytes |
+| 4 | `footer_magic` | 0xB5110000 |
 
-## Validation behavior
-A compliant reader/writer must define behavior for at least:
-- corrupt/truncated file detection
-- checksum mismatch
-- ordering hash mismatch
-- source manifest mismatch
-- version mismatch
-- unsupported codec
-- lossy reconstruction guardrails
+## Integrity Verification
 
-## Versioning policy
-- The format version MUST increase on breaking format changes.
-- A v1.x reader MUST reject unsupported future major versions with a clear version-mismatch error.
-- Patch releases MUST NOT silently alter the binary layout for the same format version.
-
-## Error mapping
-This document will later map format-level failures to structured BAMSI error codes, including:
-- CORRUPTBSI
-- CHECKSUMMISMATCH
-- ORDERINGHASHMISMATCH
-- MANIFESTMISMATCH
-- VERSIONMISMATCH
-- STREAMDECODEERROR
-- UNSUPPORTEDCODEC
-
-## Compliance notes
-This specification is track-agnostic.  
-The C and Rust reference implementations may differ internally, but observable `.bsi` format behavior must conform to the same contract.
-
-## Open stub sections
-The following sections still need full byte-accurate expansion:
-- Header field table
-- Stream codec metadata tables
-- FM-index serialization details
-- Bitvector serialization details
-- Directory entry encoding
-- Footer checksum coverage examples
-- Worked minimal `.bsi` example
+`bamsix verify` computes xxHash64 over all bytes before the footer and compares against the stored global checksum. Any single-byte modification is detected.
