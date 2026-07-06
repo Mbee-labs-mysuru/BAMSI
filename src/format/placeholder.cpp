@@ -1,4 +1,4 @@
-namespace bamsi::format {
+namespace bamsix::format {
 
 void placeholder() {}
 
