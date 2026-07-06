@@ -1,43 +1,29 @@
-BAMSI - Lossless BAM File Compression
-Copyright 2026 Abhishek
+BAMSI — BAM Succinct Index
+Copyright 2024-2026 BAMSI Authors
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+This product includes software developed by:
 
-   http://www.apache.org/licenses/LICENSE-2.0
+1. htslib — MIT/Expat License
+   Copyright (C) 2012-2024 Genome Research Ltd.
+   https://github.com/samtools/htslib
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+2. libsais — Apache License 2.0
+   Copyright (c) 2021-2024 Ilya Grebnov
+   https://github.com/IlyaGrebnov/libsais
 
-## Third Party Components
+3. sdsl-lite — GPL v3 (used as build-time dependency only;
+   the BAMSI binary does not link against sdsl-lite at runtime)
+   Copyright (c) 2016 Simon Gog
+   https://github.com/simongog/sdsl-lite
 
-This project includes or depends on the following third-party components:
+4. zstd — BSD License
+   Copyright (c) 2016-present, Facebook, Inc.
+   https://github.com/facebook/zstd
 
-### htslib
-- Copyright (C) 2012-2023 Genome Research Ltd.
-- License: MIT/Expat
-- https://github.com/samtools/htslib
+5. xxHash — BSD 2-Clause License
+   Copyright (c) 2012-2023 Yann Collet
+   https://github.com/Cyan4973/xxHash
 
-### SDSL-lite (Succinct Data Structure Library)
-- Copyright (c) 2012-2020 Simon Gog, Timo Beller, Sebastian Ostermann
-- License: LGPL v2.1
-- https://github.com/simongog/sdsl-lite
-
-### libsais
-- Copyright (c) 2014-2023 Yuta Mori
-- License: MIT
-- https://github.com/IlyaGrebnov/libsais
-
-### xxHash
-- Copyright (C) 2012-2023 Yann Collet
-- License: BSD-2-Clause
-- https://github.com/Cyan4973/xxHash
-
-### CMake
-- Copyright (c) 2000-2023 Kitware, Inc. and Contributors
-- License: BSD-3-Clause
-- https://cmake.org/
+6. OpenSSL — Apache License 2.0 (OpenSSL 3.x)
+   Copyright (c) 1998-2024 The OpenSSL Project
+   https://www.openssl.org/
