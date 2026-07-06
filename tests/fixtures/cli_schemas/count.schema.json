@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BAMSI Count Output",
+  "description": "JSON output schema for 'bamsi count --json' (Contract §10.2)",
+  "type": "object",
+  "required": ["count"],
+  "properties": {
+    "count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of occurrences of the pattern"
+    }
+  }
+}
