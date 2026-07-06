@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BAMSI Info JSON Output",
+  "description": "Schema for `bamsi info --json` output per Contract §9.2",
+  "type": "object",
+  "required": [
+    "magic", "format_version", "bamsi_version", "S_length", "N_reads",
+    "N_windows", "sample_step_s", "window_size_T", "strand_mode",
+    "qual_codec_id", "meta_codec_id", "map_codec_id", "chrom_count",
+    "ordering_hash", "source_manifest_hash", "mode", "strand_mode_name"
+  ],
+  "properties": {
+    "magic": { "type": "string", "const": "BMSI" },
+    "format_version": { "type": "integer" },
+    "bamsi_version": { "type": "string" },
+    "host_os_id": { "type": "integer" },
+    "cpu_arch_id": { "type": "integer" },
+    "build_timestamp_utc": { "type": "integer" },
+    "is_lossless": { "type": "boolean" },
+    "source_file_count": { "type": "integer" },
+    "source_manifest_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "ordering_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "S_length": { "type": "integer" },
+    "N_reads": { "type": "integer" },
+    "N_windows": { "type": "integer" },
+    "sample_step_s": { "type": "integer" },
+    "has_isa_samples": { "type": "boolean" },
+    "sample_step_s_prime": { "type": "integer" },
+    "enable_sarange": { "type": "boolean" },
+    "shared_bwt": { "type": "boolean" },
+    "enable_bidirectional": { "type": "boolean" },
+    "recommended_seed_length": { "type": "integer" },
+    "window_size_T": { "type": "integer" },
+    "entropy_order_k": { "type": "integer" },
+    "qual_codec_id": { "type": "integer" },
+    "qual_lossy_bins": { "type": "integer" },
+    "meta_codec_id": { "type": "integer" },
+    "map_codec_id": { "type": "integer" },
+    "strand_mode": { "type": "integer" },
+    "sentinel_row": { "type": "integer" },
+    "seq_block_size": { "type": "integer" },
+    "qual_block_size": { "type": "integer" },
+    "allow_parallel_sa": { "type": "boolean" },
+    "reference_based_encoding": { "type": "boolean" },
+    "sa_samples_count": { "type": "integer" },
+    "chrom_count": { "type": "integer" },
+    "chrom_name_table": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chrom_id", "name"],
+        "properties": {
+          "chrom_id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      }
+    },
+    "mode": { "type": "string", "enum": ["BASE", "ENHANCED"] },
+    "strand_mode_name": { "type": "string", "enum": ["strand_complete", "single_strand"] }
+  }
+}

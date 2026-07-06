@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BAMSI Locate Output",
+  "description": "JSON output schema for 'bamsi locate --json' (Contract §10.2)",
+  "type": "object",
+  "required": ["mode", "matches", "count"],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": ["sorted", "streaming"]
+    },
+    "matches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["strand", "chrom", "p_min", "p_max", "read_id"],
+        "properties": {
+          "strand": { "type": "string", "enum": ["+", "-"] },
+          "chrom":  { "type": "string" },
+          "p_min":  { "type": "integer", "minimum": 1 },
+          "p_max":  { "type": "integer", "minimum": 1 },
+          "read_id": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}
