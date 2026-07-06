@@ -1,0 +1,194 @@
+# BAMSIX Reference Snakemake Workflow
+# Contract §10.5: "A reference Snakemake / Nextflow workflow demonstrates BAMSIX
+# in a typical pipeline alongside samtools and bcftools."
+#
+# This workflow demonstrates a typical analysis pipeline:
+#   1. Download/prepare a BAM file
+#   2. Build the BAMSIXX index (.bsi)
+#   3. Run a set of motif-counting queries
+#   4. Run regional queries for clinically relevant regions
+#   5. Reconstruct selected reads for downstream analysis
+#   6. Compare BAMSIX GlobalCount vs samtools for validation
+#
+# Usage:
+#   snakemake --cores 8 --config bam=input.bam
+#
+# Requirements:
+#   - bamsix (this project, compiled and on PATH)
+#   - samtools >= 1.21
+#   - bcftools (optional, for variant context queries)
+#   - python >= 3.8 (for Snakemake)
+
+import os
+
+# ── Configuration ─────────────────────────────────────────────────────────────
+
+# Resolve config.yaml relative to this Snakefile's directory,
+# so the workflow works whether invoked from the repo root or from workflows/.
+configfile: os.path.join(os.path.dirname(workflow.snakefile), "config.yaml")
+
+BAM_INPUT = config.get("bam", "data/input.bam")
+BSI_OUTPUT = config.get("bsi", "results/index.bsi")
+RESULTS_DIR = config.get("results_dir", "results")
+THREADS = config.get("threads", 8)
+
+# Resolve paths to bundled tools
+REPO_ROOT = os.path.dirname(os.path.dirname(workflow.snakefile))
+SAMTOOLS = os.path.join(REPO_ROOT, "tools", "samtools")
+BAMSIX = os.path.join(REPO_ROOT, "build", "bamsix")
+
+# Default motifs for counting (Contract §8: 10 representative motifs)
+MOTIFS = config.get("motifs", [
+    "AGATC", "GATTACA", "TTAGGG", "CCAAT", "GGCC",
+    "ATCGATCG", "GCGCGCGC", "AAAAAA", "TATATAT", "CAGCAG"
+])
+
+# Clinically relevant regions (Tutorial 02: TP53 on chr17)
+REGIONS = config.get("regions", [
+    "chr17:7570000-7580000",   # TP53
+    "chr7:55019017-55211628",  # EGFR
+    "chr13:32315086-32400266", # BRCA2
+])
+
+# ── Rules ─────────────────────────────────────────────────────────────────────
+
+rule all:
+    input:
+        BSI_OUTPUT,
+        f"{RESULTS_DIR}/motif_counts.tsv",
+        f"{RESULTS_DIR}/regional_counts.tsv",
+        f"{RESULTS_DIR}/samtools_comparison.tsv",
+        f"{RESULTS_DIR}/index_info.json",
+        f"{RESULTS_DIR}/verify.log"
+
+# Step 1: Build the BAMSIX index
+rule bamsix_build:
+    input:
+        bam = BAM_INPUT
+    output:
+        bsi = BSI_OUTPUT
+    threads: THREADS
+    log:
+        f"{RESULTS_DIR}/logs/build.log"
+    shell:
+        """
+        {BAMSIX} build --input {input.bam} --output {output.bsi} \
+            --threads {threads} \
+            --window-size 100000 \
+            --sample-step 64 \
+            --entropy-k 6 \
+            --strand complete \
+            2>&1 | tee {log}
+        """
+
+# Step 2: Index verification (Contract §9.1)
+rule bamsix_verify:
+    input:
+        bsi = BSI_OUTPUT
+    output:
+        log = f"{RESULTS_DIR}/verify.log"
+    shell:
+        """
+        {BAMSIX} verify --index {input.bsi} --strict > {output.log} 2>&1
+        echo "Verification exit code: $?" >> {output.log}
+        """
+
+# Step 3: Index info (Contract §9.2 — all 30+ fields)
+rule bamsix_info:
+    input:
+        bsi = BSI_OUTPUT
+    output:
+        json = f"{RESULTS_DIR}/index_info.json"
+    shell:
+        "{BAMSIX} info --index {input.bsi} --json > {output.json}"
+
+# Step 4: Motif counting (Tutorial 01)
+rule bamsix_motif_count:
+    input:
+        bsi = BSI_OUTPUT
+    output:
+        tsv = f"{RESULTS_DIR}/motif_counts.tsv"
+    params:
+        motifs = MOTIFS
+    run:
+        import subprocess
+        with open(output.tsv, 'w') as f:
+            f.write("motif\tglobal_count\n")
+            for motif in params.motifs:
+                # Convert motif to numeric codes for bamsix
+                result = subprocess.run(
+                    [BAMSIX, "count", "--index", input.bsi,
+                     "--pattern", motif, "--json"],
+                    capture_output=True, text=True)
+                # Parse JSON output for count
+                import json
+                try:
+                    data = json.loads(result.stdout)
+                    count = data.get("count", 0)
+                except:
+                    count = "ERROR"
+                f.write(f"{motif}\t{count}\n")
+
+# Step 5: Regional queries (Tutorial 02 — clinically relevant regions)
+rule bamsix_regional_count:
+    input:
+        bsi = BSI_OUTPUT
+    output:
+        tsv = f"{RESULTS_DIR}/regional_counts.tsv"
+    params:
+        regions = REGIONS,
+        motifs = MOTIFS[:3]  # Use first 3 motifs for regional queries
+    run:
+        import subprocess, json
+        with open(output.tsv, 'w') as f:
+            f.write("motif\tregion\tregional_count\n")
+            for motif in params.motifs:
+                for region in params.regions:
+                    result = subprocess.run(
+                        [BAMSIX, "region-count", "--index", input.bsi,
+                         "--pattern", motif, "--region", region, "--json"],
+                        capture_output=True, text=True)
+                    try:
+                        data = json.loads(result.stdout)
+                        count = data.get("count", 0)
+                    except:
+                        count = "ERROR"
+                    f.write(f"{motif}\t{region}\t{count}\n")
+
+# Step 6: BAMSIX vs samtools comparison (Contract §8 — motif-scope calibration)
+rule samtools_comparison:
+    input:
+        bam = BAM_INPUT,
+        bsi = BSI_OUTPUT
+    output:
+        tsv = f"{RESULTS_DIR}/samtools_comparison.tsv"
+    params:
+        motifs = MOTIFS[:5]
+    run:
+        import subprocess, json
+        with open(output.tsv, 'w') as f:
+            f.write("motif\tbamsix_count\tsamtools_count\tratio\n")
+            for motif in params.motifs:
+                # BAMSIX count
+                result = subprocess.run(
+                    [BAMSIX, "count", "--index", input.bsi,
+                     "--pattern", motif, "--json"],
+                    capture_output=True, text=True)
+                try:
+                    bamsix_count = json.loads(result.stdout).get("count", 0)
+                except:
+                    bamsix_count = 0
+
+                # samtools grep for same motif (all alignments including
+                # secondary/supplementary — Contract §7 calibration)
+                result = subprocess.run(
+                    ["bash", "-c",
+                     f"{SAMTOOLS} view {input.bam} | grep -c '{motif}' || true"],
+                    capture_output=True, text=True)
+                try:
+                    st_count = int(result.stdout.strip())
+                except:
+                    st_count = 0
+
+                ratio = f"{bamsix_count/st_count:.4f}" if st_count > 0 else "N/A"
+                f.write(f"{motif}\t{bamsix_count}\t{st_count}\t{ratio}\n")
