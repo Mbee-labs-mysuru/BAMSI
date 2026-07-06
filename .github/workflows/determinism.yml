@@ -41,15 +41,15 @@ jobs:
         shell: bash
         run: |
           mkdir -p out
-          if [ -f build/bamsi ]; then
-            cp build/bamsi out/bamsi
-          elif [ -f build/Release/bamsi ]; then
-            cp build/Release/bamsi out/bamsi
+          if [ -f build/bamsix ]; then
+            cp build/bamsix out/bamsix
+          elif [ -f build/Release/bamsix ]; then
+            cp build/Release/bamsix out/bamsix
           else
-            echo "bamsi binary not found"
+            echo "bamsix binary not found"
             exit 1
           fi
-          sha256sum out/bamsi | tee out/SHA256SUMS.txt
+          sha256sum out/bamsix | tee out/SHA256SUMS.txt
 
       - name: Upload candidate artifact
         uses: actions/upload-artifact@v4
@@ -91,15 +91,15 @@ jobs:
         shell: bash
         run: |
           mkdir -p out
-          if [ -f build/bamsi ]; then
-            cp build/bamsi out/bamsi
-          elif [ -f build/Release/bamsi ]; then
-            cp build/Release/bamsi out/bamsi
+          if [ -f build/bamsix ]; then
+            cp build/bamsix out/bamsix
+          elif [ -f build/Release/bamsix ]; then
+            cp build/Release/bamsix out/bamsix
           else
-            echo "bamsi binary not found"
+            echo "bamsix binary not found"
             exit 1
           fi
-          shasum -a 256 out/bamsi | tee out/SHA256SUMS.txt
+          shasum -a 256 out/bamsix | tee out/SHA256SUMS.txt
 
       - name: Upload candidate artifact
         uses: actions/upload-artifact@v4

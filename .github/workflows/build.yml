@@ -78,13 +78,13 @@ jobs:
        - name: Smoke-check binary presence
          shell: bash
          run: |
-           test -f build/bamsi || test -f build/Release/bamsi
+           test -f build/bamsix || test -f build/Release/bamsix
 
        - name: Upload build artifact
          uses: actions/upload-artifact@v4
          with:
            name: build-${{ matrix.name }}
            path: |
-             build/bamsi
-             build/Release/bamsi
+             build/bamsix
+             build/Release/bamsix
            if-no-files-found: ignore
