@@ -85,6 +85,7 @@ tools/
 
 # ── Dependencies built locally ────────────────────────────────────────
 deps/
+!external/deps/
 
 # ── Python / environment ─────────────────────────────────────────────
 __pycache__/

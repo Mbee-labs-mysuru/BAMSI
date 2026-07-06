@@ -1,12 +1,12 @@
-#include "bamsi/app.hpp"
+#include "bamsix/app.hpp"
 #include <iostream>
 
-namespace bamsi {
+namespace bamsix {
 
 Status RunHelp() {
-    std::cout << "usage: bamsi <subcommand>\n";
+    std::cout << "usage: bamsix <subcommand>\n";
     std::cout << "subcommands: version, build, count, exists, locate, region-count, region-exists, reconstruct, info, verify\n";
     return Status::Ok();
 }
 
-}  // namespace bamsi
+}  // namespace bamsix

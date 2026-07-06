@@ -46,7 +46,7 @@ jobs:
           Real previous-major-version .bsi fixtures will be added once:
           1. the .bsi writer is implemented,
           2. versioned fixtures are generated and pinned,
-          3. bamsi info / verify / open-paths are stable enough to test.
+          3. bamsix info / verify / open-paths are stable enough to test.
           FIXEOF
 
       - name: Check scaffold preconditions
@@ -54,7 +54,7 @@ jobs:
         run: |
           test -d compatibility/fixtures
           test -f compatibility/fixtures/README.md
-          test -f build/bamsi || test -f build/Release/bamsi
+          test -f build/bamsix || test -f build/Release/bamsix
 
       - name: Placeholder compatibility gate
         shell: bash

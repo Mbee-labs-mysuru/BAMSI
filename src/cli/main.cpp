@@ -1,5 +1,5 @@
-#include "bamsi/app.hpp"
+#include "bamsix/app.hpp"
 
 int main(int argc, char** argv) {
-    return bamsi::RunApp(argc, argv).ok() ? 0 : 1;
+    return bamsix::RunApp(argc, argv).ok() ? 0 : 1;
 }

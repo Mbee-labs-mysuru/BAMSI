@@ -69,7 +69,6 @@ target_include_directories(htslib_imported INTERFACE
 target_link_libraries(htslib_imported INTERFACE
     bzip2_local
     z
-    lzma
     Threads::Threads
 )
 
