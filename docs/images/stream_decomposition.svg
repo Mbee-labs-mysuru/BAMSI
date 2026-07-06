@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360">
+  <defs>
+    <marker id="arw" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0,0 7,2.5 0,5" fill="#404040"/>
+    </marker>
+    <style>
+      text { font-family: Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="720" height="360" fill="none"/>
+
+  <!-- ===== BAM RECORD (top) ===== -->
+  <rect x="60" y="20" width="600" height="56" rx="5" fill="#F8F9FA" stroke="#5F6B7A" stroke-width="1.6"/>
+  <text x="360" y="38" text-anchor="middle" font-size="11" font-weight="bold" fill="#1A1A1A">Aligned BAM Record (r<tspan baseline-shift="sub" font-size="8">i</tspan>)</text>
+
+  <!-- Field boxes inside BAM record -->
+  <rect x="72" y="48" width="68" height="20" rx="3" fill="#E8F0FE" stroke="#93A8C4" stroke-width="0.8"/>
+  <text x="106" y="62" text-anchor="middle" font-size="7.5" fill="#333">sequence</text>
+
+  <rect x="148" y="48" width="68" height="20" rx="3" fill="#FEF3E2" stroke="#C4A86B" stroke-width="0.8"/>
+  <text x="182" y="62" text-anchor="middle" font-size="7.5" fill="#333">quality</text>
+
+  <rect x="224" y="48" width="56" height="20" rx="3" fill="#E8F5E9" stroke="#81A784" stroke-width="0.8"/>
+  <text x="252" y="62" text-anchor="middle" font-size="7.5" fill="#333">CIGAR</text>
+
+  <rect x="288" y="48" width="50" height="20" rx="3" fill="#E8F5E9" stroke="#81A784" stroke-width="0.8"/>
+  <text x="313" y="62" text-anchor="middle" font-size="7.5" fill="#333">FLAG</text>
+
+  <rect x="346" y="48" width="56" height="20" rx="3" fill="#E8F5E9" stroke="#81A784" stroke-width="0.8"/>
+  <text x="374" y="62" text-anchor="middle" font-size="7.5" fill="#333">qname</text>
+
+  <rect x="410" y="48" width="42" height="20" rx="3" fill="#E8F5E9" stroke="#81A784" stroke-width="0.8"/>
+  <text x="431" y="62" text-anchor="middle" font-size="7.5" fill="#333">aux</text>
+
+  <rect x="460" y="48" width="56" height="20" rx="3" fill="#F3E8FE" stroke="#9C7AB8" stroke-width="0.8"/>
+  <text x="488" y="62" text-anchor="middle" font-size="7.5" fill="#333">chrom</text>
+
+  <rect x="524" y="48" width="48" height="20" rx="3" fill="#F3E8FE" stroke="#9C7AB8" stroke-width="0.8"/>
+  <text x="548" y="62" text-anchor="middle" font-size="7.5" fill="#333">pos</text>
+
+  <rect x="580" y="48" width="68" height="20" rx="3" fill="#F3E8FE" stroke="#9C7AB8" stroke-width="0.8"/>
+  <text x="614" y="62" text-anchor="middle" font-size="7.5" fill="#333">mapq</text>
+
+  <!-- ===== DECOMPOSITION ARROWS ===== -->
+  <!-- Arrow to Sseq -->
+  <line x1="106" y1="76" x2="106" y2="145" stroke="#3B7DD8" stroke-width="1.3" marker-end="url(#arw)"/>
+  <!-- Arrow to Squal -->
+  <line x1="182" y1="76" x2="270" y2="145" stroke="#C4943A" stroke-width="1.3" marker-end="url(#arw)"/>
+  <!-- Arrow to Smeta (from CIGAR, FLAG, qname, aux) -->
+  <line x1="330" y1="76" x2="440" y2="145" stroke="#4A8C5E" stroke-width="1.3" marker-end="url(#arw)"/>
+  <line x1="374" y1="76" x2="440" y2="145" stroke="#4A8C5E" stroke-width="1.3" stroke-dasharray="3,2"/>
+  <line x1="431" y1="76" x2="440" y2="145" stroke="#4A8C5E" stroke-width="1.3" stroke-dasharray="3,2"/>
+  <!-- Arrow to Smap (from chrom, pos, mapq) -->
+  <line x1="548" y1="76" x2="620" y2="145" stroke="#7B5EA7" stroke-width="1.3" marker-end="url(#arw)"/>
+  <line x1="614" y1="76" x2="620" y2="145" stroke="#7B5EA7" stroke-width="1.3" stroke-dasharray="3,2"/>
+
+  <!-- ===== STREAM BOXES ===== -->
+  <!-- Sseq — highlighted as FM-indexed -->
+  <rect x="20" y="150" width="175" height="80" rx="5" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.8"/>
+  <text x="108" y="172" text-anchor="middle" font-size="11" font-weight="bold" fill="#1A1A1A">S<tspan baseline-shift="sub" font-size="8">seq</tspan></text>
+  <text x="108" y="188" text-anchor="middle" font-size="8" fill="#444">Nucleotide sequences</text>
+  <text x="108" y="202" text-anchor="middle" font-size="7.5" fill="#666">Codec: BWT → MTF → RLE → Arith</text>
+  <text x="108" y="218" text-anchor="middle" font-size="7.5" fill="#666">Alphabet: {A, C, G, T, N, #}</text>
+
+  <!-- Squal -->
+  <rect x="205" y="150" width="160" height="80" rx="5" fill="#FFF8EE" stroke="#D4A24A" stroke-width="1.4"/>
+  <text x="285" y="172" text-anchor="middle" font-size="11" font-weight="bold" fill="#1A1A1A">S<tspan baseline-shift="sub" font-size="8">qual</tspan></text>
+  <text x="285" y="188" text-anchor="middle" font-size="8" fill="#444">Phred quality scores</text>
+  <text x="285" y="202" text-anchor="middle" font-size="7.5" fill="#666">Codec: 4 selectable options</text>
+  <text x="285" y="218" text-anchor="middle" font-size="7.5" fill="#666">Range: [0, 93]</text>
+
+  <!-- Smeta -->
+  <rect x="375" y="150" width="145" height="80" rx="5" fill="#EDF7EE" stroke="#5A9E65" stroke-width="1.4"/>
+  <text x="448" y="172" text-anchor="middle" font-size="11" font-weight="bold" fill="#1A1A1A">S<tspan baseline-shift="sub" font-size="8">meta</tspan></text>
+  <text x="448" y="188" text-anchor="middle" font-size="8" fill="#444">Alignment metadata</text>
+  <text x="448" y="202" text-anchor="middle" font-size="7.5" fill="#666">CIGAR, FLAG, qname, aux</text>
+  <text x="448" y="218" text-anchor="middle" font-size="7.5" fill="#666">Codec: typed field splitting</text>
+
+  <!-- Smap -->
+  <rect x="530" y="150" width="170" height="80" rx="5" fill="#F5F0FA" stroke="#8B6DB5" stroke-width="1.4"/>
+  <text x="615" y="172" text-anchor="middle" font-size="11" font-weight="bold" fill="#1A1A1A">S<tspan baseline-shift="sub" font-size="8">map</tspan></text>
+  <text x="615" y="188" text-anchor="middle" font-size="8" fill="#444">Mapping coordinates</text>
+  <text x="615" y="202" text-anchor="middle" font-size="7.5" fill="#666">chrom, pos, mapq</text>
+  <text x="615" y="218" text-anchor="middle" font-size="7.5" fill="#666">Codec: delta + range</text>
+
+  <!-- ===== FM-INDEX ANNOTATION on Sseq ===== -->
+  <line x1="108" y1="230" x2="108" y2="265" stroke="#2563EB" stroke-width="1.3" marker-end="url(#arw)"/>
+  <rect x="30" y="270" width="155" height="38" rx="5" fill="#2563EB" stroke="none"/>
+  <text x="108" y="290" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#fff">FM-Index</text>
+  <text x="108" y="302" text-anchor="middle" font-size="7" fill="#C5DCFA">O(|P|) pattern matching</text>
+
+  <!-- ===== LAZY DECODE ANNOTATION on Smeta and Smap ===== -->
+  <line x1="448" y1="230" x2="448" y2="268" stroke="#5A9E65" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="615" y1="230" x2="615" y2="268" stroke="#8B6DB5" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="448" y1="268" x2="615" y2="268" stroke="#777" stroke-width="0.8" stroke-dasharray="4,3"/>
+  <text x="532" y="282" text-anchor="middle" font-size="8" fill="#777" font-style="italic">Accessed per-read during Locate</text>
+
+  <!-- ===== RECONSTRUCT ANNOTATION on Squal ===== -->
+  <line x1="285" y1="230" x2="285" y2="268" stroke="#D4A24A" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="285" y="282" text-anchor="middle" font-size="8" fill="#777" font-style="italic">Full reconstruction</text>
+
+  <!-- ===== KEY PROPERTIES at bottom ===== -->
+  <rect x="20" y="320" width="680" height="28" rx="4" fill="#F8F9FA" stroke="#DDD" stroke-width="0.8"/>
+  <text x="360" y="338" text-anchor="middle" font-size="8" fill="#555">
+    Each stream is independently decodable (Invariant I10). Only S<tspan baseline-shift="sub" font-size="6.5">seq</tspan> is indexed; remaining streams require no decompression for counting queries.
+  </text>
+</svg>

@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="380" viewBox="0 0 720 380">
+  <defs>
+    <style>
+      text { font-family: Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="720" height="380" fill="none"/>
+
+  <!-- Title -->
+  <text x="360" y="22" text-anchor="middle" font-size="11" font-weight="bold" fill="#1A1A1A">RegionalCount Wall-Clock Time — ENHANCED vs BASE Tier</text>
+  <text x="360" y="36" text-anchor="middle" font-size="8" fill="#888">Dataset A (NA12878 2M reads), chr1, three region sizes, three motifs</text>
+
+  <!-- Y-axis label -->
+  <text x="18" y="210" text-anchor="middle" font-size="9" fill="#555" transform="rotate(-90 18 210)">Wall-clock time (seconds)</text>
+
+  <!-- Y-axis -->
+  <line x1="60" y1="50" x2="60" y2="335" stroke="#999" stroke-width="0.8"/>
+
+  <!-- Y-axis ticks: 0s=y335, scale 0.667px/s -->
+  <line x1="56" y1="335" x2="60" y2="335" stroke="#999" stroke-width="0.8"/>
+  <text x="52" y="339" text-anchor="end" font-size="7.5" fill="#777">0</text>
+  <line x1="60" y1="335" x2="695" y2="335" stroke="#EEE" stroke-width="0.5"/>
+
+  <line x1="56" y1="302" x2="60" y2="302" stroke="#999" stroke-width="0.8"/>
+  <text x="52" y="306" text-anchor="end" font-size="7.5" fill="#777">50</text>
+  <line x1="60" y1="302" x2="695" y2="302" stroke="#EEE" stroke-width="0.5"/>
+
+  <line x1="56" y1="268" x2="60" y2="268" stroke="#999" stroke-width="0.8"/>
+  <text x="52" y="272" text-anchor="end" font-size="7.5" fill="#777">100</text>
+  <line x1="60" y1="268" x2="695" y2="268" stroke="#EEE" stroke-width="0.5"/>
+
+  <line x1="56" y1="235" x2="60" y2="235" stroke="#999" stroke-width="0.8"/>
+  <text x="52" y="239" text-anchor="end" font-size="7.5" fill="#777">150</text>
+  <line x1="60" y1="235" x2="695" y2="235" stroke="#EEE" stroke-width="0.5"/>
+
+  <line x1="56" y1="202" x2="60" y2="202" stroke="#999" stroke-width="0.8"/>
+  <text x="52" y="206" text-anchor="end" font-size="7.5" fill="#777">200</text>
+  <line x1="60" y1="202" x2="695" y2="202" stroke="#EEE" stroke-width="0.5"/>
+
+  <line x1="56" y1="168" x2="60" y2="168" stroke="#999" stroke-width="0.8"/>
+  <text x="52" y="172" text-anchor="end" font-size="7.5" fill="#777">250</text>
+  <line x1="60" y1="168" x2="695" y2="168" stroke="#EEE" stroke-width="0.5"/>
+
+  <line x1="56" y1="135" x2="60" y2="135" stroke="#999" stroke-width="0.8"/>
+  <text x="52" y="139" text-anchor="end" font-size="7.5" fill="#777">300</text>
+  <line x1="60" y1="135" x2="695" y2="135" stroke="#EEE" stroke-width="0.5"/>
+
+  <line x1="56" y1="102" x2="60" y2="102" stroke="#999" stroke-width="0.8"/>
+  <text x="52" y="106" text-anchor="end" font-size="7.5" fill="#777">350</text>
+  <line x1="60" y1="102" x2="695" y2="102" stroke="#EEE" stroke-width="0.5"/>
+
+  <line x1="56" y1="68" x2="60" y2="68" stroke="#999" stroke-width="0.8"/>
+  <text x="52" y="72" text-anchor="end" font-size="7.5" fill="#777">400</text>
+  <line x1="60" y1="68" x2="695" y2="68" stroke="#EEE" stroke-width="0.5"/>
+
+  <!-- X-axis -->
+  <line x1="60" y1="335" x2="695" y2="335" stroke="#999" stroke-width="0.8"/>
+
+  <!-- ===== GROUP 1: [1, 10³] — no speedup (overhead) ===== -->
+  <text x="160" y="355" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">[1, 10³]</text>
+  <text x="160" y="366" text-anchor="middle" font-size="7" fill="#888">1 kb region</text>
+
+  <!-- TTAGGG: ENH=15.4s, BASE=13.1s — height: 10px, 9px -->
+  <rect x="82" y="325" width="16" height="10" fill="#2563EB" stroke="none"/>
+  <rect x="100" y="326" width="16" height="9" fill="#93B4E0" stroke="none"/>
+  <text x="99" y="320" text-anchor="middle" font-size="6" fill="#999">0.9×</text>
+  <text x="99" y="345" text-anchor="middle" font-size="5.5" fill="#555">TTAGGG</text>
+
+  <!-- GATTACA: ENH=15.5s, BASE=13.5s -->
+  <rect x="130" y="325" width="16" height="10" fill="#2563EB" stroke="none"/>
+  <rect x="148" y="326" width="16" height="9" fill="#93B4E0" stroke="none"/>
+  <text x="147" y="320" text-anchor="middle" font-size="6" fill="#999">0.9×</text>
+  <text x="147" y="345" text-anchor="middle" font-size="5.5" fill="#555">GATTACA</text>
+
+  <!-- ACGT: ENH=11.5s, BASE=14.0s -->
+  <rect x="178" y="327" width="16" height="8" fill="#2563EB" stroke="none"/>
+  <rect x="196" y="326" width="16" height="9" fill="#93B4E0" stroke="none"/>
+  <text x="195" y="320" text-anchor="middle" font-size="6" fill="#999">1.2×</text>
+  <text x="195" y="345" text-anchor="middle" font-size="5.5" fill="#555">ACGT</text>
+
+  <!-- No-speedup annotation -->
+  <text x="160" y="312" text-anchor="middle" font-size="7" fill="#C44" font-style="italic">overhead</text>
+
+  <!-- ===== GROUP 2: [1, 10⁵] — still overhead ===== -->
+  <text x="370" y="355" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">[1, 10⁵]</text>
+  <text x="370" y="366" text-anchor="middle" font-size="7" fill="#888">100 kb region</text>
+
+  <!-- TTAGGG: ENH=27.6s, BASE=17.8s — heights: 18px, 12px -->
+  <rect x="292" y="317" width="16" height="18" fill="#2563EB" stroke="none"/>
+  <rect x="310" y="323" width="16" height="12" fill="#93B4E0" stroke="none"/>
+  <text x="309" y="312" text-anchor="middle" font-size="6" fill="#999">0.6×</text>
+  <text x="309" y="345" text-anchor="middle" font-size="5.5" fill="#555">TTAGGG</text>
+
+  <!-- GATTACA: ENH=24.7s, BASE=16.1s — heights: 16px, 11px -->
+  <rect x="340" y="319" width="16" height="16" fill="#2563EB" stroke="none"/>
+  <rect x="358" y="324" width="16" height="11" fill="#93B4E0" stroke="none"/>
+  <text x="357" y="314" text-anchor="middle" font-size="6" fill="#999">0.7×</text>
+  <text x="357" y="345" text-anchor="middle" font-size="5.5" fill="#555">GATTACA</text>
+
+  <!-- ACGT: ENH=34.2s, BASE=18.3s — heights: 23px, 12px -->
+  <rect x="388" y="312" width="16" height="23" fill="#2563EB" stroke="none"/>
+  <rect x="406" y="323" width="16" height="12" fill="#93B4E0" stroke="none"/>
+  <text x="405" y="307" text-anchor="middle" font-size="6" fill="#999">0.5×</text>
+  <text x="405" y="345" text-anchor="middle" font-size="5.5" fill="#555">ACGT</text>
+
+  <!-- No-speedup annotation -->
+  <text x="370" y="302" text-anchor="middle" font-size="7" fill="#C44" font-style="italic">overhead</text>
+
+  <!-- ===== GROUP 3: [1, 10⁶] — SPEEDUP visible ===== -->
+  <text x="580" y="355" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">[1, 10⁶]</text>
+  <text x="580" y="366" text-anchor="middle" font-size="7" fill="#888">1 Mb region</text>
+
+  <!-- TTAGGG: ENH=57.3s, BASE=145.9s — heights: 38px, 97px -->
+  <rect x="502" y="297" width="22" height="38" fill="#2563EB" stroke="none"/>
+  <rect x="526" y="238" width="22" height="97" fill="#93B4E0" stroke="none"/>
+  <text x="526" y="232" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#2E7D32">2.5×</text>
+  <text x="515" y="346" text-anchor="middle" font-size="6" fill="#555">TTAGGG</text>
+
+  <!-- GATTACA: ENH=46.3s, BASE=49.2s — heights: 31px, 33px -->
+  <rect x="560" y="304" width="22" height="31" fill="#2563EB" stroke="none"/>
+  <rect x="584" y="302" width="22" height="33" fill="#93B4E0" stroke="none"/>
+  <text x="583" y="296" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#2E7D32">1.1×</text>
+  <text x="573" y="346" text-anchor="middle" font-size="6" fill="#555">GATTACA</text>
+
+  <!-- ACGT: ENH=120.8s, BASE=423.5s — heights: 81px, 282px -->
+  <rect x="618" y="254" width="22" height="81" fill="#2563EB" stroke="none"/>
+  <rect x="642" y="53" width="22" height="282" fill="#93B4E0" stroke="none"/>
+  <text x="653" y="47" text-anchor="middle" font-size="8" font-weight="bold" fill="#2E7D32">3.5×</text>
+  <text x="631" y="346" text-anchor="middle" font-size="6" fill="#555">ACGT</text>
+
+  <!-- Speedup annotation -->
+  <text x="580" y="248" text-anchor="middle" font-size="7" fill="#2E7D32" font-weight="bold">speedup ✓</text>
+
+  <!-- ===== LEGEND ===== -->
+  <rect x="285" y="48" width="14" height="12" fill="#2563EB" stroke="none"/>
+  <text x="304" y="58" font-size="8" fill="#333">ENHANCED tier</text>
+  <rect x="395" y="48" width="14" height="12" fill="#93B4E0" stroke="none"/>
+  <text x="414" y="58" font-size="8" fill="#333">BASE tier</text>
+  <text x="500" y="58" font-size="7" fill="#2E7D32" font-weight="bold">N.N× = BASE/ENH speedup</text>
+
+  <!-- Bottom annotation -->
+  <text x="360" y="378" text-anchor="middle" font-size="7.5" fill="#777" font-style="italic">ENHANCED-tier speedup emerges at megabase scale; sub-window regions show wavelet-tree overhead</text>
+</svg>

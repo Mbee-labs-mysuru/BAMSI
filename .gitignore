@@ -108,7 +108,7 @@ sruti.png
 reconstructed.bam
 task.md
 BLANK_README.md
-images/
+/images/
 
 # ── Snakemake results (generated output, not source) ─────────────────
 workflows/results*/

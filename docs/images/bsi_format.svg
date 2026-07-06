@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460">
+  <defs>
+    <style>
+      text { font-family: Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="720" height="460" fill="none"/>
+
+  <!-- File outline -->
+  <rect x="130" y="10" width="460" height="440" rx="6" fill="none" stroke="#4B6A8C" stroke-width="2"/>
+
+  <!-- File label -->
+  <text x="360" y="30" text-anchor="middle" font-size="11" font-weight="bold" fill="#1A1A1A">.bsi Sealed Index File</text>
+
+  <!-- ===== HEADER ===== -->
+  <rect x="145" y="40" width="430" height="48" rx="4" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.4"/>
+  <text x="360" y="58" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A1A1A">Header</text>
+  <text x="360" y="74" text-anchor="middle" font-size="7.5" fill="#444">Magic ("BMSI") · Version · Build params · SHA-256 provenance · Chromosome table</text>
+  <!-- Size annotation -->
+  <text x="598" y="62" text-anchor="start" font-size="7" fill="#888">Fixed size</text>
+
+  <!-- ===== STREAM SECTIONS ===== -->
+  <!-- Sseq -->
+  <rect x="145" y="96" width="105" height="48" rx="4" fill="#E8F0FE" stroke="#5B8AC4" stroke-width="1.2"/>
+  <text x="198" y="114" text-anchor="middle" font-size="9" font-weight="bold" fill="#1A1A1A">S<tspan baseline-shift="sub" font-size="7">seq</tspan></text>
+  <text x="198" y="132" text-anchor="middle" font-size="6.5" fill="#555">BWT-encoded</text>
+
+  <!-- Squal -->
+  <rect x="256" y="96" width="105" height="48" rx="4" fill="#FFF8EE" stroke="#D4A24A" stroke-width="1.2"/>
+  <text x="309" y="114" text-anchor="middle" font-size="9" font-weight="bold" fill="#1A1A1A">S<tspan baseline-shift="sub" font-size="7">qual</tspan></text>
+  <text x="309" y="132" text-anchor="middle" font-size="6.5" fill="#555">Quality scores</text>
+
+  <!-- Smeta -->
+  <rect x="367" y="96" width="100" height="48" rx="4" fill="#EDF7EE" stroke="#5A9E65" stroke-width="1.2"/>
+  <text x="417" y="114" text-anchor="middle" font-size="9" font-weight="bold" fill="#1A1A1A">S<tspan baseline-shift="sub" font-size="7">meta</tspan></text>
+  <text x="417" y="132" text-anchor="middle" font-size="6.5" fill="#555">CIGAR, FLAG, …</text>
+
+  <!-- Smap -->
+  <rect x="473" y="96" width="102" height="48" rx="4" fill="#F5F0FA" stroke="#8B6DB5" stroke-width="1.2"/>
+  <text x="524" y="114" text-anchor="middle" font-size="9" font-weight="bold" fill="#1A1A1A">S<tspan baseline-shift="sub" font-size="7">map</tspan></text>
+  <text x="524" y="132" text-anchor="middle" font-size="6.5" fill="#555">Coordinates</text>
+
+  <!-- Brace for streams -->
+  <text x="122" y="124" text-anchor="end" font-size="7.5" fill="#888" font-style="italic">Streams</text>
+  <text x="122" y="134" text-anchor="end" font-size="6.5" fill="#AAA">25.6%</text>
+
+  <!-- Per-section checksum markers -->
+  <rect x="145" y="148" width="430" height="14" rx="2" fill="#F0F4F8" stroke="#CCC" stroke-width="0.6"/>
+  <text x="360" y="158" text-anchor="middle" font-size="7" fill="#888">xxHash64 checksum per stream section</text>
+
+  <!-- ===== FM-INDEX SECTION ===== -->
+  <rect x="145" y="170" width="430" height="56" rx="4" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.4"/>
+  <text x="360" y="190" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A1A1A">FM-Index Section</text>
+
+  <!-- Sub-components inside FM-index -->
+  <rect x="158" y="198" width="65" height="20" rx="3" fill="#C5DCFA" stroke="#93B4E0" stroke-width="0.8"/>
+  <text x="191" y="211" text-anchor="middle" font-size="7" fill="#333">BWT/Occ</text>
+
+  <rect x="229" y="198" width="55" height="20" rx="3" fill="#C5DCFA" stroke="#93B4E0" stroke-width="0.8"/>
+  <text x="257" y="211" text-anchor="middle" font-size="7" fill="#333">C array</text>
+
+  <rect x="290" y="198" width="80" height="20" rx="3" fill="#C5DCFA" stroke="#93B4E0" stroke-width="0.8"/>
+  <text x="330" y="211" text-anchor="middle" font-size="7" fill="#333">SA samples</text>
+
+  <rect x="376" y="198" width="80" height="20" rx="3" fill="#C5DCFA" stroke="#93B4E0" stroke-width="0.8"/>
+  <text x="416" y="211" text-anchor="middle" font-size="7" fill="#333">Rank support</text>
+
+  <rect x="462" y="198" width="100" height="20" rx="3" fill="#C5DCFA" stroke="#93B4E0" stroke-width="0.8"/>
+  <text x="512" y="211" text-anchor="middle" font-size="7" fill="#333">Select support</text>
+
+  <!-- Annotation -->
+  <text x="122" y="196" text-anchor="end" font-size="7.5" fill="#888" font-style="italic">FM-Index</text>
+  <text x="122" y="206" text-anchor="end" font-size="6.5" fill="#AAA">74.4%</text>
+
+  <!-- ===== BITVECTOR SECTION ===== -->
+  <rect x="145" y="234" width="210" height="44" rx="4" fill="#EFF3F8" stroke="#4B6A8C" stroke-width="1.2"/>
+  <text x="250" y="252" text-anchor="middle" font-size="9" font-weight="bold" fill="#1A1A1A">Bitvectors</text>
+  <text x="250" y="268" text-anchor="middle" font-size="7.5" fill="#555">B<tspan baseline-shift="sub" font-size="6">read</tspan> and B<tspan baseline-shift="sub" font-size="6">window</tspan> with rank/select</text>
+
+  <!-- ===== WINDOW TABLE ===== -->
+  <rect x="365" y="234" width="210" height="44" rx="4" fill="#EFF3F8" stroke="#4B6A8C" stroke-width="1.2"/>
+  <text x="470" y="252" text-anchor="middle" font-size="9" font-weight="bold" fill="#1A1A1A">Window Table</text>
+  <text x="470" y="268" text-anchor="middle" font-size="7.5" fill="#555">J entries, 48 bytes each</text>
+
+  <!-- ===== PER-READ DIRECTORY ===== -->
+  <rect x="145" y="286" width="430" height="40" rx="4" fill="#EFF3F8" stroke="#4B6A8C" stroke-width="1.2"/>
+  <text x="360" y="304" text-anchor="middle" font-size="9" font-weight="bold" fill="#1A1A1A">Per-Read Directory</text>
+  <text x="360" y="318" text-anchor="middle" font-size="7.5" fill="#555">N entries: stream offsets for lazy decode during Locate</text>
+
+  <!-- ===== OPTIONAL SECTIONS ===== -->
+  <rect x="145" y="334" width="210" height="44" rx="4" fill="#F8F9FA" stroke="#BBB" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="250" y="352" text-anchor="middle" font-size="9" font-weight="bold" fill="#888">ISA Samples</text>
+  <text x="250" y="366" text-anchor="middle" font-size="7.5" fill="#AAA">Optional, step s'</text>
+
+  <rect x="365" y="334" width="210" height="44" rx="4" fill="#F8F9FA" stroke="#BBB" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="470" y="352" text-anchor="middle" font-size="9" font-weight="bold" fill="#888">SARange Wavelet Tree</text>
+  <text x="470" y="366" text-anchor="middle" font-size="7.5" fill="#AAA">ENHANCED tier only</text>
+
+  <!-- Optional label -->
+  <text x="122" y="356" text-anchor="end" font-size="7" fill="#AAA" font-style="italic">Optional</text>
+
+  <!-- ===== FOOTER ===== -->
+  <rect x="145" y="386" width="430" height="48" rx="4" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.4"/>
+  <text x="360" y="404" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A1A1A">Footer</text>
+  <text x="360" y="420" text-anchor="middle" font-size="7.5" fill="#444">Global xxHash64 checksum · Section offsets · Magic bytes ("BMSI")</text>
+  <text x="598" y="404" text-anchor="start" font-size="7" fill="#888">Fixed size</text>
+
+  <!-- ===== LEFT ANNOTATIONS: byte offsets arrow ===== -->
+  <line x1="120" y1="42" x2="120" y2="432" stroke="#CCC" stroke-width="0.8"/>
+  <text x="115" y="48" text-anchor="end" font-size="6.5" fill="#AAA">0x00</text>
+  <text x="115" y="430" text-anchor="end" font-size="6.5" fill="#AAA">EOF</text>
+  <!-- Tick marks -->
+  <line x1="117" y1="42" x2="122" y2="42" stroke="#CCC" stroke-width="0.8"/>
+  <line x1="117" y1="96" x2="122" y2="96" stroke="#CCC" stroke-width="0.8"/>
+  <line x1="117" y1="170" x2="122" y2="170" stroke="#CCC" stroke-width="0.8"/>
+  <line x1="117" y1="234" x2="122" y2="234" stroke="#CCC" stroke-width="0.8"/>
+  <line x1="117" y1="286" x2="122" y2="286" stroke="#CCC" stroke-width="0.8"/>
+  <line x1="117" y1="334" x2="122" y2="334" stroke="#CCC" stroke-width="0.8"/>
+  <line x1="117" y1="386" x2="122" y2="386" stroke="#CCC" stroke-width="0.8"/>
+  <line x1="117" y1="432" x2="122" y2="432" stroke="#CCC" stroke-width="0.8"/>
+</svg>
