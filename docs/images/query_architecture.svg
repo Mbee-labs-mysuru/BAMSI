@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420">
+  <defs>
+    <marker id="arw" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0,0 7,2.5 0,5" fill="#404040"/>
+    </marker>
+    <marker id="arw-blue" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0,0 7,2.5 0,5" fill="#2563EB"/>
+    </marker>
+    <style>
+      text { font-family: Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="720" height="420" fill="none"/>
+
+  <!-- ===== INPUT: Pattern P ===== -->
+  <rect x="20" y="28" width="120" height="36" rx="18" fill="#F0F4F8" stroke="#4B6A8C" stroke-width="1.4"/>
+  <text x="80" y="50" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A1A1A">Pattern P</text>
+
+  <!-- Arrow P → Backward Search -->
+  <line x1="140" y1="46" x2="175" y2="46" stroke="#404040" stroke-width="1.2" marker-end="url(#arw)"/>
+
+  <!-- ===== BACKWARD SEARCH ===== -->
+  <rect x="180" y="20" width="195" height="52" rx="5" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.8"/>
+  <text x="278" y="42" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A1A1A">Backward Search</text>
+  <text x="278" y="58" text-anchor="middle" font-size="8" fill="#444">FM-index: O(|P|) per orientation</text>
+
+  <!-- Arrow → SA interval -->
+  <line x1="375" y1="46" x2="415" y2="46" stroke="#404040" stroke-width="1.2" marker-end="url(#arw)"/>
+
+  <!-- SA Interval result -->
+  <rect x="420" y="26" width="115" height="40" rx="5" fill="#F0F4F8" stroke="#4B6A8C" stroke-width="1.2"/>
+  <text x="478" y="44" text-anchor="middle" font-size="9" font-weight="bold" fill="#1A1A1A">SA interval</text>
+  <text x="478" y="56" text-anchor="middle" font-size="8" fill="#555">[lo, hi)</text>
+
+  <!-- ===== BRANCH POINT ===== -->
+  <circle cx="478" cy="88" r="3" fill="#404040"/>
+  <line x1="478" y1="66" x2="478" y2="88" stroke="#404040" stroke-width="1.2"/>
+
+  <!-- Branch left: GlobalCount / GlobalExists -->
+  <line x1="478" y1="88" x2="620" y2="88" stroke="#404040" stroke-width="1.2"/>
+  <line x1="620" y1="88" x2="620" y2="103" stroke="#404040" stroke-width="1.2" marker-end="url(#arw)"/>
+
+  <rect x="555" y="108" width="145" height="50" rx="5" fill="#E8F5E9" stroke="#43A047" stroke-width="1.4"/>
+  <text x="628" y="128" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#1A1A1A">GlobalCount</text>
+  <text x="628" y="142" text-anchor="middle" font-size="8" fill="#444">Return hi − lo</text>
+  <text x="628" y="154" text-anchor="middle" font-size="7" fill="#777">GlobalExists: hi − lo > 0</text>
+
+  <!-- Branch down: Locate path -->
+  <line x1="478" y1="88" x2="250" y2="88" stroke="#404040" stroke-width="1.2"/>
+  <line x1="250" y1="88" x2="250" y2="103" stroke="#404040" stroke-width="1.2" marker-end="url(#arw)"/>
+  <text x="364" y="83" text-anchor="middle" font-size="7.5" fill="#888" font-style="italic">for each row in [lo, hi)</text>
+
+  <!-- ===== SA RESOLUTION ===== -->
+  <rect x="165" y="108" width="170" height="50" rx="5" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.6"/>
+  <text x="250" y="128" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#1A1A1A">SA Resolution</text>
+  <text x="250" y="142" text-anchor="middle" font-size="8" fill="#444">LF-walk to sampled row</text>
+  <text x="250" y="154" text-anchor="middle" font-size="7" fill="#777">O(s) per occurrence</text>
+
+  <!-- Arrow → position -->
+  <line x1="250" y1="158" x2="250" y2="180" stroke="#404040" stroke-width="1.2" marker-end="url(#arw)"/>
+
+  <!-- ===== READ IDENTIFICATION ===== -->
+  <rect x="148" y="185" width="204" height="48" rx="5" fill="#EFF3F8" stroke="#4B6A8C" stroke-width="1.4"/>
+  <text x="250" y="204" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#1A1A1A">Read Identification</text>
+  <text x="250" y="220" text-anchor="middle" font-size="8" fill="#444">B<tspan baseline-shift="sub" font-size="6.5">read</tspan>: rank₁(pos) → read id, O(1)</text>
+
+  <!-- Arrow → CIGAR Mapping -->
+  <line x1="250" y1="233" x2="250" y2="258" stroke="#404040" stroke-width="1.2" marker-end="url(#arw)"/>
+
+  <!-- ===== CIGAR MAPPING ===== -->
+  <rect x="140" y="263" width="220" height="48" rx="5" fill="#EFF3F8" stroke="#4B6A8C" stroke-width="1.4"/>
+  <text x="250" y="282" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#1A1A1A">Coordinate Mapping</text>
+  <text x="250" y="298" text-anchor="middle" font-size="8" fill="#444">S<tspan baseline-shift="sub" font-size="6.5">meta</tspan> + S<tspan baseline-shift="sub" font-size="6.5">map</tspan> → CigarRefPos → [p<tspan baseline-shift="sub" font-size="6">min</tspan>, p<tspan baseline-shift="sub" font-size="6">max</tspan>]</text>
+
+  <!-- Arrow → Output -->
+  <line x1="250" y1="311" x2="250" y2="340" stroke="#404040" stroke-width="1.2" marker-end="url(#arw)"/>
+
+  <!-- ===== OUTPUT ===== -->
+  <rect x="170" y="345" width="160" height="36" rx="18" fill="#2563EB" stroke="none"/>
+  <text x="250" y="367" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">Match Records</text>
+
+  <!-- ===== REGIONAL QUERY PATH (right side) ===== -->
+  <!-- Branch from SA interval for regional queries -->
+  <line x1="478" y1="88" x2="478" y2="185" stroke="#404040" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="478" y1="185" x2="440" y2="185" stroke="#404040" stroke-width="1.2" marker-end="url(#arw)"/>
+
+  <!-- Region filter label -->
+  <text x="510" y="140" text-anchor="start" font-size="7.5" fill="#888" font-style="italic" transform="rotate(90 510 140)">Regional path</text>
+
+  <!-- ===== REGIONAL FILTER BOX ===== -->
+  <rect x="395" y="170" width="165" height="100" rx="5" fill="#FFF8EE" stroke="#D4A24A" stroke-width="1.4"/>
+  <text x="478" y="190" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#1A1A1A">Region Filter</text>
+  <text x="478" y="206" text-anchor="middle" font-size="8" fill="#444">(chrom, [a, b])</text>
+
+  <!-- Two sub-boxes for BASE vs ENHANCED -->
+  <rect x="405" y="215" width="68" height="44" rx="3" fill="#EFF3F8" stroke="#4B6A8C" stroke-width="1"/>
+  <text x="439" y="230" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#333">BASE</text>
+  <text x="439" y="242" text-anchor="middle" font-size="6.5" fill="#555">Locate all,</text>
+  <text x="439" y="252" text-anchor="middle" font-size="6.5" fill="#555">then filter</text>
+
+  <rect x="482" y="215" width="68" height="44" rx="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/>
+  <text x="516" y="230" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#333">ENHANCED</text>
+  <text x="516" y="242" text-anchor="middle" font-size="6.5" fill="#444">SARange</text>
+  <text x="516" y="252" text-anchor="middle" font-size="6.5" fill="#444">prune first</text>
+
+  <!-- Arrow from Region Filter to Output area -->
+  <line x1="478" y1="270" x2="478" y2="345" stroke="#D4A24A" stroke-width="1.0" stroke-dasharray="4,3"/>
+  <line x1="478" y1="345" x2="335" y2="363" stroke="#D4A24A" stroke-width="1.0" marker-end="url(#arw)"/>
+
+  <!-- ===== COMPLEXITY LABELS ===== -->
+  <rect x="555" y="290" width="150" height="65" rx="4" fill="#F8F9FA" stroke="#DDD" stroke-width="0.8"/>
+  <text x="630" y="306" text-anchor="middle" font-size="8" font-weight="bold" fill="#333">Query Complexity</text>
+  <text x="630" y="320" text-anchor="middle" font-size="7" fill="#555">GlobalCount: O(|P|)</text>
+  <text x="630" y="332" text-anchor="middle" font-size="7" fill="#555">Locate: O(|P| + occ · s)</text>
+  <text x="630" y="344" text-anchor="middle" font-size="7" fill="#555">RegionalCount<tspan baseline-shift="sub" font-size="5.5">ENH</tspan>: O(|P| + occ<tspan baseline-shift="sub" font-size="5.5">r</tspan>·s</text>
+  <text x="630" y="352" text-anchor="middle" font-size="7" fill="#555">     + |W<tspan baseline-shift="sub" font-size="5.5">r</tspan>|·log(|S|/s))</text>
+
+  <!-- ===== STRAND ANNOTATION ===== -->
+  <text x="80" y="15" font-size="7.5" fill="#888" font-style="italic">Strand-complete: search P and rc(P)</text>
+</svg>
