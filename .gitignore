@@ -1,19 +1,18 @@
-# Generated build files
+# ═══════════════════════════════════════════════════════════════════════
+# BAMSIX v1.0 — .gitignore
+# Purpose: Block all business-sensitive, experimental, and generated files
+# ═══════════════════════════════════════════════════════════════════════
+
+# ── Build artifacts ───────────────────────────────────────────────────
 build/
 install/
 cmake-build-*/
 compile_commands.json
+CMakeCache.txt
+CMakeFiles/
+Makefile
 
-# Local environment
-env/
-.vscode/
-.idea/
-.DS_Store
-
-# Generated data
-data/
-
-# Object files and binaries
+# ── Object files and binaries ─────────────────────────────────────────
 *.o
 *.a
 *.so
@@ -22,10 +21,98 @@ data/
 *.exe
 *.out
 
-# CMake
-CMakeCache.txt
-CMakeFiles/
-Makefile
+# ── Data (large files NOT for GitHub) ─────────────────────────────────
+data/
+# Exception: synthetic test BAM is small enough to include
+!data/
+!data/test/
+!data/test/synthetic_10k.bam
+# Block everything else in data/
+data/raw/
+data/*.bam
+data/*.bsi
+data/*.cram
+data/*.bai
+data/checksums/
+data/checksums.txt
+data/NA12878*
+data/RMNISTHS*
 
+# ── Architecture, Contract, Execution Plans (BUSINESS SENSITIVE) ──────
+spec/
+docs/imp/
+docs/gates/
+docs/notes/
+docs/runbooks/
+docs/PROJECT.md
+docs/paper2_theory_draft.md
+Implementing BAMSI Project Execution Plan.md
+
+# ── Research papers (UNPUBLISHED — under review) ─────────────────────
+docs/papers/
+papers/
+BAMSI_Paper1_Systems_Draft.docx
+BAMSI_Paper2_Theory_Draft.docx
+BAMSI_PeerReview_Round2.md
+
+# ── Report generation scripts (M.Tech report) ────────────────────────
+generate_chapter*.py
+generate_final_report.py
+master_compiler.py
+compile_monkeypatch.py
+extract_content.py
+build_master_script.py
+midterm_content.md
+new_doc_content.md
+new_doc_images/
+
+# ── macOS experiment scripts ─────────────────────────────────────────
+macos/
+
+# ── Experiment / benchmark scripts (NOT for public) ──────────────────
+scripts/experiment_*.sh
+scripts/validate_na12878.sh
+scripts/generate_paper*.py
+scripts/rename_bamsi_to_bamsix.sh
+scripts/staged_commit.sh
+benchmarks/
+testbed/
+Testing/
+
+# ── Tools binaries (samtools, seqkit — too large for git) ────────────
+tools/
+
+# ── Dependencies built locally ────────────────────────────────────────
+deps/
+
+# ── Python / environment ─────────────────────────────────────────────
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# ── IDE / editor ─────────────────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+*~
+
+# ── Misc temporary files ─────────────────────────────────────────────
 *.bak
 *.orig
+sruti.png
+reconstructed.bam
+task.md
+BLANK_README.md
+images/
+
+# ── Snakemake results (generated output, not source) ─────────────────
+workflows/results*/
+workflows/.snakemake/
+
+# ── Merge/phase temp files ────────────────────────────────────────────
+merge_readme.py
+README_phase*.md
+README_new.md
