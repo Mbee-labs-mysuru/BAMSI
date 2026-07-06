@@ -44,6 +44,9 @@ jobs:
            uname -m
            cmake --version
 
+       - name: Build external dependencies
+         shell: bash
+         run: bash scripts/build_deps.sh
        - name: Configure CMake with tests enabled
          shell: bash
          env:

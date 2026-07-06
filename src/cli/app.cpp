@@ -1,11 +1,11 @@
-#include "bamsi/app.hpp"
-#include "bamsi/cli/dispatch.hpp"
-#include "bamsi/cli/help.hpp"
-#include "bamsi/cli/version.hpp"
+#include "bamsix/app.hpp"
+#include "bamsix/cli/dispatch.hpp"
+#include "bamsix/cli/help.hpp"
+#include "bamsix/cli/version.hpp"
 
 #include <string>
 
-namespace bamsi {
+namespace bamsix {
 
 Status RunApp(int argc, char** argv) {
     if (argc <= 1) {
@@ -22,7 +22,7 @@ Status RunApp(int argc, char** argv) {
         return RunVersion();
     }
 
-    return DispatchKnownCommand(cmd);
+    return DispatchCommand(cmd, argc, argv);
 }
 
-}  // namespace bamsi
+}  // namespace bamsix

@@ -229,10 +229,10 @@ Status HandleCount(int argc, char** argv) {
         else if (strand_arg == "complete" || strand_arg == "StrandComplete")
             mode = StrandMode::StrandComplete;
 
-        // --overlap override (default: overlapping; "none" = non-overlapping)
-        OverlapMode overlap = OverlapMode::All;
+        // --overlap override (default: all; "none" = non-overlapping grep-compatible)
         auto overlap_arg = ParseStringArg(argc, argv, "--overlap");
-        if (overlap_arg == "none" || overlap_arg == "nonoverlapping")
+        OverlapMode overlap = OverlapMode::All;
+        if (overlap_arg == "none" || overlap_arg == "None")
             overlap = OverlapMode::None;
 
         // Phase 2: Backward search (O(|P|) algorithmic phase)
@@ -331,7 +331,6 @@ Status HandleLocate(int argc, char** argv) {
         std::vector<Match> matches;
         if (!idx.meta_directory.empty() && !idx.map_directory.empty()) {
             // Build dense absolute-position table ONCE for O(1) delta resolution
-            // instead of O(N) per-occurrence backward+forward scan
             auto full_abs_table = BuildFullAbsPosTable(
                 idx.map_payload, idx.map_directory, idx.header.map_codec_id);
             matches = LocateLazy(pattern, idx.fm, idx.bv.B_read,

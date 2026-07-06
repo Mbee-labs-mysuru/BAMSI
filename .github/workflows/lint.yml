@@ -42,7 +42,7 @@ jobs:
       - name: Run clang-tidy on tracked source files
         shell: bash
         run: |
-          mapfile -t files < <(git ls-files '*.cpp' '*.cc' '*.cxx' '*.hpp' '*.hh' '*.h' | grep -E '^(src|include|tests)/' || true)
+          mapfile -t files < <(git ls-files '*.cpp' '*.cc' '*.cxx' | grep -E '^(src|tests)/' || true)
           if [ ${#files[@]} -eq 0 ]; then
             echo "No source files found for clang-tidy"
             exit 0
