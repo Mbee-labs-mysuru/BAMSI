@@ -5,6 +5,7 @@
 
 # ── Build artifacts ───────────────────────────────────────────────────
 build/
+!external/zstd/build/
 install/
 cmake-build-*/
 compile_commands.json
