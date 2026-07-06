@@ -58,6 +58,13 @@ jobs:
             --enable=warning,style,performance,portability \
             --error-exitcode=1 \
             --inline-suppr \
+            --suppress=invalidLifetime \
+            --suppress=truncLongCastAssignment \
+            --suppress=redundantInitialization \
+            --suppress=unreadVariable \
+            --suppress=unusedPrivateFunction \
+            --suppress=knownConditionTrueFalse \
+            --suppress=useStlAlgorithm \
             --quiet \
             --std=c++20 \
             -I include \

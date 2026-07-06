@@ -36,13 +36,21 @@ fi
 # 2. Build htslib
 if [ ! -f "external/htslib/libhts.a" ]; then
     echo "Building htslib..."
-    cd external/htslib
-    # htslib requires autoreconf
-    autoreconf -i > /dev/null 2>&1
-    ./configure --disable-bz2 --disable-lzma --disable-libcurl > /dev/null 2>&1
-    make clean > /dev/null 2>&1
-    make lib-static NONCONFIGURE_OBJS="" CFLAGS="-g -O2 -fPIC -I$(pwd)/../deps/include" -j4 > /dev/null 2>&1
-    cd ../..
+    mkdir -p /tmp/htslib_build
+    cd /tmp/htslib_build
+    curl -sLO https://github.com/samtools/htslib/releases/download/1.21/htslib-1.21.tar.bz2
+    tar -xf htslib-1.21.tar.bz2
+    cd htslib-1.21
+    
+    ./configure --disable-bz2 --disable-lzma --disable-libcurl
+    make lib-static NONCONFIGURE_OBJS="" CFLAGS="-g -O2 -fPIC -I$REPO_ROOT/external/deps/include" -j4
+    
+    # Copy the built artifacts back into the repository structure
+    mkdir -p "$REPO_ROOT/external/htslib"
+    cp libhts.a "$REPO_ROOT/external/htslib/"
+    
+    cd "$REPO_ROOT"
+    rm -rf /tmp/htslib_build
     echo "htslib built successfully."
 else
     echo "htslib already built."
